@@ -1,4 +1,4 @@
-local _, addon = ... -- namespace
+local addon = abtNS
 local ABT_abouttext = '<HTML><BODY>\
 <H1>|cff00ff00ActionButtonText (1.02)|r</H1>\
 <H2>Created by &lt;Damage Inc&gt; of (EU)Draenor</H2>\
@@ -40,7 +40,7 @@ function addon.addopt(n,class,spellname,text)
 	optbtn:SetPoint('TOPLEFT', _G['obiabout'], 'BOTTOMLEFT', 0, -30 * (n - 1) + -40)
 	optbtn.classname = class
 	optbtn.spellname = spellname
-	optbtn:SetScript('OnClick',addon.optclick)
+	optbtn:SetScript('OnClick', addon.optclick)
 
 	if ABT_SpellDB and ABT_SpellDB['PRESET'..addon.prehash(spellname)] then
 		optbtn:SetChecked(true)
@@ -61,48 +61,4 @@ function addon.optshow()
 		x = x + 1
 		optb = _G['obiopt'..x]
 	end
-end
-
-function addon.OptionsInit()
-	local ABT_optionspanel = CreateFrame('Frame', 'OBIOptions', UIParent)
-	ABT_optionspanel.name = 'ActionButtonText'
-	ABT_optionspanel:SetScript('OnShow', addon.optshow)
-	InterfaceOptions_AddCategory(ABT_optionspanel)
-
-	local scroll0 = CreateFrame('ScrollFrame', 'obiscr0', ABT_optionspanel)
-	scroll0:SetPoint('TOPLEFT', ABT_optionspanel, 'TOPLEFT', 15, -15)
-	scroll0:SetPoint('TOPRIGHT', ABT_optionspanel, 'TOPRIGHT', -40, 15)
-	scroll0:SetPoint('BOTTOM', ABT_optionspanel, 'BOTTOM', -5)
-	local about = CreateFrame('SimpleHTML', 'obiabout', scroll0)
-	about:SetFontObject('P', GameFontHighlightSmall)
-	about:SetFontObject('H1', GameFontHighlightLarge)
-	about:SetFontObject('H2', GameFontHighlight)
-	about:SetWidth(360)
-	about:SetHeight(40)
-	about:SetText(ABT_abouttext)
-	about:Show()
-	scroll0:SetScrollChild(about)
-
-	local x = 1
-	for class in pairs(addon.presets) do
-		if class == 'ALL' or class == select(2,UnitClass('PLAYER')) or class == select(2,UnitRace('PLAYER')) then 
-			for spell in pairs(addon.presets[class]) do
-				addon.addopt(x,class,spell,addon.presets[class][spell]['DESC'] or spell)
-				x = x + 1
-			end
-		end
-	end
-
-	local savec = CreateFrame('Button','obiconfig', ABT_optionspanel, 'UIPanelButtonTemplate')
-	savec:SetWidth(220)
-	savec:SetHeight(20)
-	savec:SetPoint('BOTTOMLEFT', ABT_optionspanel, 'BOTTOMLEFT', 20, 20)
-	savec:SetText(addon.opt1)
-
-	savec:SetScript('OnClick', function()
-		InterfaceOptionsFrameCancel_OnClick()
-		addon.configpanel:Show()
-	end)
-
-	savec:Show()
 end

@@ -1,5 +1,3 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
     -- mouseover function
@@ -61,6 +59,6 @@ if (cfg.petBar.mouseover) then
     EnableMouseOver('PetActionButton', PetActionBarFrame, 1, 10, cfg.petBar.alpha, cfg.petBar.hiddenAlpha)
 end
 
-if (cfg.stanceBar.mouseover) then
-    EnableMouseOver('StanceButton', StanceBarFrame, 1, NUM_STANCE_SLOTS, cfg.stanceBar.alpha, cfg.stanceBar.hiddenAlpha)
+if (cfg.shapeshiftBar.mouseover) then
+    EnableMouseOver('ShapeshiftButton', ShapeshiftBarFrame, 1, NUM_SHAPESHIFT_SLOTS, cfg.shapeshiftBar.alpha, cfg.shapeshiftBar.hiddenAlpha)
 end

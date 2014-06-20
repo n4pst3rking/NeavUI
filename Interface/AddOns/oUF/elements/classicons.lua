@@ -30,7 +30,7 @@
    self.ClassIcons = ClassIcons
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local PlayerClass = select(2, UnitClass'player')

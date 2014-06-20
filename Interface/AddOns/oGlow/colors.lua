@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 local argcheck = oGlow.argcheck
@@ -14,7 +13,6 @@ local colorTable = setmetatable(
 		argcheck(val, 2, 'number')
 		local r, g, b = GetItemQualityColor(val)
 		rawset(self, val, {r, g, b})
-
 		return self[val]
 	end}
 )

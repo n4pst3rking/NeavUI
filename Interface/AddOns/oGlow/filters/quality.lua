@@ -1,4 +1,4 @@
-local threshold
+local threshold = 1
 
 local quality = function(...)
 	local quality = -1

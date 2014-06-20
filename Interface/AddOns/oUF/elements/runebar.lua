@@ -40,7 +40,7 @@
 
 if select(2, UnitClass("player")) ~= "DEATHKNIGHT" then return end
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 oUF.colors.runes = {

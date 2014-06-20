@@ -1,5 +1,6 @@
+nTooltip = {}
 
-local _, nTooltip = ...
+STAT_AVERAGE_ITEM_LEVEL = "Item Level";
 
 nTooltip.Config = {
     fontSize = 15,
@@ -19,24 +20,23 @@ nTooltip.Config = {
     abbrevRealmNames = false, 
     hideRealmText = false,                      -- Hide the coalesced/interactive realm text
     showPlayerTitles = true,
-    showUnitRole = true,
-    showPVPIcons = false,                       -- Show pvp icons instead of just a prefix
+    showPVPIcons = true,                       -- Show pvp icons instead of just a prefix
     showMouseoverTarget = true,
     showItemLevel = true,
-    showSpecializationIcon = true,
+    showTalentSpec = true,
 
     healthbar = {
         showHealthValue = true,
 
         healthFormat = '$cur / $max',           -- Possible: $cur, $max, $deficit, $perc, $smartperc, $smartcolorperc, $colorperc
-        healthFullFormat = '$cur',              -- if the tooltip unit has 100% hp 
+        healthFullFormat = '',              -- if the tooltip unit has 100% hp 
 
         fontSize = 13,
         font = 'Fonts\\ARIALN.ttf',
         showOutline = true,
         textPos = 'CENTER',                     -- Possible 'TOP' 'BOTTOM' 'CENTER'
 
-        reactionColoring = false,               -- Overrides customColor 
+        reactionColoring = true,               -- Overrides customColor 
         customColor = {
             apply = false, 
             r = 0, 

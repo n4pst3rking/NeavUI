@@ -28,7 +28,7 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local Update = function(self, event)
@@ -38,7 +38,7 @@ local Update = function(self, event)
 	end
 
 	local unit = self.unit
-	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit)
+	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit)
 	if(isLeader) then
 		leader:Show()
 	else

@@ -1,5 +1,4 @@
-
-local _, ns = ...
+local ns = oUFNeav
 local config = ns.Config
 
 function ns.ColorBorder(self, ...)

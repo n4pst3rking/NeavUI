@@ -1,43 +1,42 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
-if (not cfg.MainMenuBar.shortBar and not cfg.MainMenuBar.moveableExtraBars) then
-    return
+if (not cfg.MainMenuBar.shortBar or not cfg.MainMenuBar.moveableExtraBars) then
+  return
 end
-
-    -- moveable bars
 
 for _, frame in pairs({
-    _G['PetActionBarFrame'],
-    _G['StanceBarFrame'],
-    _G['PossessBarFrame'],
-    _G['MultiCastActionBarFrame'],
+  _G['ShapeshiftBarFrame'],
+  _G['PetActionBarFrame']
 }) do
-    frame:EnableMouse(false)
+  frame:EnableMouse(false)
 end
 
-    -- key + alt-key and left mouse to move
-
-for _, button in pairs({
-    _G['PossessButton1'],
-    _G['PetActionButton1'],
-    _G['StanceButton1'],
+for _, frame in pairs({
+  shapeshiftBar = _G['ShapeshiftButton1'],
+  petBar = _G['PetActionButton1']
 }) do
-    button:ClearAllPoints()
-    button:SetPoint('CENTER', UIParent, -100)
+  local positionCfg = cfg[_].position
+  if (positionCfg) then
+    frame:ClearAllPoints()
+    frame:SetPoint(unpack(positionCfg))
+  else
+    frame:ClearAllPoints()
+    frame:SetPoint('CENTER', UIParent, -100)
 
-    button:SetMovable(true)
-    button:SetUserPlaced(true)
+    frame:SetMovable(true)
+    -- frame:EnableMouse(true)
+    frame:SetUserPlaced(true)
 
-    button:RegisterForDrag('LeftButton')
-    button:HookScript('OnDragStart', function(self)
-        if (IsShiftKeyDown() and IsAltKeyDown()) then
-            self:StartMoving()
-        end
+    frame:RegisterForDrag('LeftButton')
+    
+    frame:SetScript('OnDragStart', function(self)
+      if (IsShiftKeyDown() and IsAltKeyDown()) then
+        self:StartMoving()
+      end
     end)
 
-    button:HookScript('OnDragStop', function(self) 
-        self:StopMovingOrSizing()
+    frame:SetScript('OnDragStop', function(self)
+      self:StopMovingOrSizing()
     end)
+  end
 end

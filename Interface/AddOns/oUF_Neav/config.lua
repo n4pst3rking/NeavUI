@@ -1,6 +1,6 @@
+oUFNeav = {}
 
-local _, ns = ...
-
+local ns = oUFNeav
 --[[
 
     The 'Tag-System'
@@ -29,7 +29,7 @@ ns.Config = {
         pvpicons = true,
         classPortraits = false,
         threeDPortraits = false,                                                            -- 3DPortraits; Overrides classPortraits
-        disableCooldown = false,                                                            -- Disable custom cooldown text to use addons like omnicc
+        disableCooldown = true,                                                            -- Disable custom cooldown text to use addons like omnicc
         portraitTimer = true,
     },
 
@@ -141,7 +141,7 @@ ns.Config = {
             disableAura = false,                                                            -- Disable Auras on this unitframe
 
             showComboPoints = true,
-            showComboPointsAsNumber = false,
+            showComboPointsAsNumber = true,
             numComboPointsColor = {0.9, 0, 0},                                              -- Textcolor of the combopoints if showComboPointsAsNumber = true
 
             mouseoverText = false,
@@ -244,30 +244,6 @@ ns.Config = {
             powerTagNoMana = '$cur',
 
             position = {'TOPLEFT', UIParent, 25, -200},
-        },
-
-        ['boss'] = {
-            scale = 1,
-
-            mouseoverText = true,
-            healthTag = '$cur - $perc',
-            healthTagFull = '$cur',
-            powerTag = '$cur',
-            powerTagFull = '$cur',
-            powerTagNoMana = '$cur',
-
-            position = {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -250},
-
-            castbar = {
-                color = {1, 0, 0},
-                interruptColor = {1, 0, 1},
-
-                icon = {
-                    size = 22,
-                    show = false,
-                    position = 'LEFT'   -- 'LEFT' or 'RIGHT'
-                },
-            },
         },
 
         ['arena'] = {

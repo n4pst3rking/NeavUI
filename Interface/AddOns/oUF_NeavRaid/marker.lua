@@ -1,4 +1,4 @@
-
+if true then return end
 local button = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
 -- button:UnregisterAllEvents()
@@ -11,7 +11,7 @@ button:Hide()
 button:HookScript('OnClick', function()
     local dropDown = DropDownList1
     local p1, p2, p3, p4, p5 = dropDown:GetPoint()
-    dropDown:SetPoint(p1, p2, p3, p4 + 9, p5 - 5) 
+    dropDown:SetPoint(p1, p2, p3, p4 + 9, p5 - 5)
 end)
 
 _G[button:GetName()..'Left']:SetTexture(nil)
@@ -22,7 +22,7 @@ _G[button:GetName()..'Middle'].SetTexture = function() end
 
 _G[button:GetName()..'Right']:SetTexture(nil)
 _G[button:GetName()..'Right'].SetTexture = function() end
-               
+
 buttonHighlight = button:GetHighlightTexture()
 buttonHighlight:ClearAllPoints()
 buttonHighlight:SetPoint('CENTER', button)

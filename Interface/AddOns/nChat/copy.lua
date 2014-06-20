@@ -1,15 +1,13 @@
-
 local select = select
 local tostring = tostring
 local concat = table.concat
 
-    -- First, we create the copy frame
-
+-- First, we create the copy frame
 local f = CreateFrame('Frame', nil, UIParent)
-f:SetHeight(220)
+SetSize(f, 220, 200)
 f:SetBackdropColor(0, 0, 0, 1)
-f:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 3, 10)
-f:SetPoint('BOTTOMRIGHT', ChatFrame1EditBox, 'TOPRIGHT', -3, 10)
+f:SetPoint('BOTTOMLEFT', ChatFrameEditBox, 'TOPLEFT', 3, 10)
+f:SetPoint('BOTTOMRIGHT', ChatFrameEditBox, 'TOPRIGHT', -3, 10)
 f:SetFrameStrata('DIALOG')
 f:CreateBeautyBorder(12)
 f:SetBackdrop({
@@ -30,7 +28,7 @@ f.t:SetJustifyH('LEFT')
 f.b = CreateFrame('EditBox', nil, f)
 f.b:SetMultiLine(true)
 f.b:SetMaxLetters(20000)
-f.b:SetSize(450, 270)
+SetSize(f.b, 450, 270)
 f.b:SetScript('OnEscapePressed', function()
     f:Hide() 
 end)
@@ -57,64 +55,64 @@ local function GetChatLines(...)
     return count - 1
 end
 
-local function copyChat(self)
-    local chat = _G[self:GetName()]
+local function copyChat(chat)
     local _, fontSize = chat:GetFont()
 
-    FCF_SetChatWindowFontSize(self, chat, 0.1)
+    FCF_SetChatWindowFontSize(chat, 0.1)
     local lineCount = GetChatLines(chat:GetRegions())
-    FCF_SetChatWindowFontSize(self, chat, fontSize)
+    FCF_SetChatWindowFontSize(chat, fontSize)
 
     if (lineCount > 0) then
-        ToggleFrame(f)
-        f.t:SetText(chat:GetName())
+      f:Show()
+      f.t:SetText(_G[chat:GetName()..'Tab']:GetText())
 
-        local f1, f2, f3 = ChatFrame1:GetFont()
-        f.b:SetFont(f1, f2, f3)
+      local f1, f2, f3 = ChatFrame1:GetFont()
+      f.b:SetFont(f1, f2, f3)
 
-        local text = concat(lines, '\n', 1, lineCount)
-        f.b:SetText(text)
+      local text = concat(lines, '\n', 1, lineCount)
+      f.b:SetText(text)
     end
 end
 
-local function CreateCopyButton(self)
-    self.Copy = CreateFrame('Button', nil, _G[self:GetName()])
-    self.Copy:SetSize(20, 20)
-    self.Copy:SetPoint('TOPRIGHT', self, -5, -5)
+local function CreateCopyButton(chat)
+    chat.Copy = CreateFrame('Button', 'CopyChatButton', _G[chat:GetName()])
+    SetSize(chat.Copy, 20, 20)
+    chat.Copy:SetPoint('TOPRIGHT', chat, -5, -5)
 
-    self.Copy:SetNormalTexture('Interface\\AddOns\\nChat\\media\\textureCopyNormal')
-    self.Copy:GetNormalTexture():SetSize(20, 20)
+    chat.Copy:SetNormalTexture('Interface\\AddOns\\nChat\\media\\textureCopyNormal')
+    SetSize(chat.Copy:GetNormalTexture(), 20, 20)
 
-    self.Copy:SetHighlightTexture('Interface\\AddOns\\nChat\\media\\textureCopyHighlight')
-    self.Copy:GetHighlightTexture():SetAllPoints(self.Copy:GetNormalTexture())
+    chat.Copy:SetHighlightTexture('Interface\\AddOns\\nChat\\media\\textureCopyHighlight')
+    chat.Copy:GetHighlightTexture():SetAllPoints(chat.Copy:GetNormalTexture())
 
-    local tab = _G[self:GetName()..'Tab']
+    local tab = _G[chat:GetName()..'Tab']
     hooksecurefunc(tab, 'SetAlpha', function()
-        self.Copy:SetAlpha(tab:GetAlpha()*0.55)
+        chat.Copy:SetAlpha(tab:GetAlpha() * 0.55)
     end)
     
-    self.Copy:SetScript('OnMouseDown', function(self)
-        self:GetNormalTexture():ClearAllPoints()
-        self:GetNormalTexture():SetPoint('CENTER', 1, -1)
+    subscribe(chat.Copy, 'OnMouseDown', function(self)
+      self:GetNormalTexture():ClearAllPoints()
+      self:GetNormalTexture():SetPoint('CENTER', 1, -1)
     end)
-
-    self.Copy:SetScript('OnMouseUp', function()
-        self.Copy:GetNormalTexture():ClearAllPoints()
-        self.Copy:GetNormalTexture():SetPoint('CENTER')
+    
+    subscribe(chat.Copy, 'OnMouseUp', function(self)
+        self:GetNormalTexture():ClearAllPoints()
+        self:GetNormalTexture():SetPoint('CENTER')
         
-        if (self.Copy:IsMouseOver()) then
-            copyChat(self)
+        if (IsMouseOver(self)) then
+          copyChat(chat)
         end
     end)
+    
+    chat.Copy:SetAlpha(0)
 end
 
 local function EnableCopyButton()
-    for _, v in pairs(CHAT_FRAMES) do
-        local chat = _G[v]
-        if (chat and not chat.Copy) then
-            CreateCopyButton(chat)
-        end
+  for i = 1, NUM_CHAT_WINDOWS do
+    local chat = _G['ChatFrame'..i]
+    if (chat and not chat.Copy) then
+      CreateCopyButton(chat)
     end
+  end
 end
-hooksecurefunc('FCF_OpenTemporaryWindow', EnableCopyButton)
 EnableCopyButton()

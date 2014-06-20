@@ -1,4 +1,4 @@
-local _, addon = ...
+local addon = abtNS
 
 addon.API = {}
 
@@ -69,7 +69,7 @@ function addon.SetText(button, id, text, fontSize, ol)
 	end
 
 	if buttonText then
-		buttonText:SetFont('Fonts\\ARIALN.ttf', fontSize or 16, 'OUTLINE')
+		buttonText:SetFont('Fonts\\ARIALN.ttf', fontSize or 16, ol)
 		buttonText:SetText(text)
 	end
 end
@@ -100,22 +100,34 @@ local function Search(f1, f2)
 	return false
 end
 
-local function Aura(unit, aura, func)
-	local name, _, _, stack, _, _, timeLeft, caster = func(unit, aura)
-	return name, (timeLeft or 0) - GetTime(), stack or 0, caster
+local function Aura(unit, aura, func, isDebuff)
+  for i = 1, 40 do
+    local name, _, _, stack, debuffType, timeLeft, duration = func(unit, i)
+    if (name and name:match(aura)) then
+      if (isDebuff) then
+        timeLeft = duration
+        duration = debuffType
+        debuffType = nil
+      end
+      return name, timeLeft or 0, stack or 0
+    end
+  end
 end
 
-local function CheckBuff(buffName, isDebuff, unit, notMine)
-	local func = isDebuff and UnitDebuff or UnitBuff
+local function CheckBuff(buffName, isDebuff, unit)
+	local func = UnitBuff
+  if (isDebuff) then
+    func = UnitDebuff
+  end
 
 	if UnitExists(unit) then
-		local name, timeLeft, stack, caster = Aura(unit, buffName, func)
+		local name, timeLeft, stack = Aura(unit, buffName, func, isDebuff)
 
 		if not name then
 			return 0, 0
 		end
 
-		if caster == 'player' or notMine and name == buffName or Search(upper(name), upper(buffName)) then
+		if name == buffName or Search(upper(name), upper(buffName)) then
 			return timeLeft, stack
 		end
 	end
@@ -139,11 +151,11 @@ local function GetObi(spellName, spellTable)
 	local fontStyle = spellTable['FONTSTYLE'] or 1
 	local buffName = spellTable['Buff'] or spellName
 	local debuff = spellTable['Debuff']
-	local unit = addon.targetValues[spellTable['TARGET']] or 'PLAYER'
+	local unit = addon.UnitWatchValues[spellTable['TARGET']] or 'PLAYER'
 	local text = ''
 	local name, rank, icon, cost, isfunnel, powertype
 
-	local timeleft, charges = CheckBuff(buffName, debuff, unit, spellTable['NOTMINE'])
+	local timeleft, charges = CheckBuff(buffName, debuff, unit)
 
 	if (spellTable['NoTime'] or false) == false then
 		if timeleft and timeleft > 0 then
@@ -156,7 +168,7 @@ local function GetObi(spellName, spellTable)
 	end
 
 	local cp = 0
-	cp = GetComboPoints('player', 'target') --WOTLK
+	cp = GetComboPoints('player', 'target')
 	if spellTable['CP'] and cp >= spellTable['CP']-1 and UnitPowerType('PLAYER') == 3 then -- uses energy
 		text = addon.NeedSlash(text,cp)
 	end
@@ -220,7 +232,7 @@ local function GetObi(spellName, spellTable)
 	end
 
 	if text == '0' then text = ' ' end -- traps 0 CPs
-	return text, fontSize, spellPosition, addon.fontStyleValues[fontStyle]
+	return text, fontSize, spellPosition, addon.ButtonTextStyleValues[fontStyle]
 end
 
 function addon.GetText(button,id)
@@ -314,21 +326,20 @@ end
 function addon:UpdateText()
 	for x = 1, 120 do
 		local button = ButtonName(x)
-
-		if button and button:IsVisible() then
+		if (button and button:IsVisible()) then
 			self.ClearText(button)
 
 			local action = GetPagedActionButtonID(button, x)
 			if action and action ~= '()' then
-				local type, id = GetActionInfo(action)
+				local type, spellbookid = GetActionInfo(action)
 
 				if type then
 					local spellname = nil
 					local spellid = nil
 
-					if type == 'spell' and id ~= 0 then
-						spellid = id
-						spellname = GetSpellInfo(id)
+					if type == 'spell' and spellbookid ~= 0 then
+            spellname = GetSpellName(spellbookid, type)
+						spellid = spellbookid
 					elseif type == 'macro' then
 						ABT_ToolTipScan:SetOwner(WorldFrame, 'ANCHOR_NONE') -- without this, tooltip can fail 'randomly'
 						ABT_ToolTipScan:ClearLines()
@@ -336,7 +347,7 @@ function addon:UpdateText()
 						spellid = ABT_ToolTipScanTextLeft1:GetText()
 						spellname = spellid
 					elseif type == 'item' then
-						spellid = GetItemInfo(id)
+						spellid = GetItemInfo(spellbookid)
 						spellname = spellid
 					end
 
@@ -373,7 +384,7 @@ function addon:UpdateText()
 									end
 
 									if tooltipDB[spellid] and Search(tooltipDB[spellid], spellf) then
-										text, fontSize, spellPosition, fontStyle = GetObi(spellname, ABT_SpellDB[spell])
+										text, fontSize, spellPosition, fontStyle = Search(upper(spellname), spellf)(spellname, ABT_SpellDB[spell])
 									end
 								else
 									if Search(upper(spellname), spellf) then
@@ -403,8 +414,6 @@ f:RegisterEvent('PLAYER_TARGET_CHANGED')
 f:RegisterEvent('PLAYER_AURAS_CHANGED')
 f:RegisterEvent('UPDATE_MACROS')
 f:RegisterEvent('UNIT_ENERGY')
-f:RegisterEvent('RUNE_POWER_UPDATE')
-f:RegisterEvent('UNIT_RUNIC_POWER')
 f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 f:RegisterEvent('SPELLS_CHANGED')
 
@@ -412,8 +421,6 @@ f:SetScript('OnEvent', function(self, event, arg1)
 	if event == 'PLAYER_ENTERING_WORLD' then
 		local tt = CreateFrame('GameTooltip', 'ABT_ToolTipScan', UIParent, 'GameTooltipTemplate')
 
-		addon.ConfigInit()
-		addon.OptionsInit()
 		Setup()
 
 		self:UnregisterEvent('PLAYER_ENTERING_WORLD')
@@ -431,7 +438,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
 end)
 
 f:SetScript('OnUpdate', function(self, elapsed)
-	if GetTime() - lastButtonUpdate > updateInterval then
+	if ((GetTime() - lastButtonUpdate) > updateInterval) then
 		addon:UpdateText()
 		lastButtonUpdate = GetTime()
 	end
@@ -439,14 +446,7 @@ end)
 
 SLASH_ABT1 = '/abt'
 SlashCmdList['ABT'] = function(opts)
-	if UnitAffectingCombat('player') then
-		DEFAULT_CHAT_FRAME:AddMessage('Error: /abt is disabled in combat',1,0,0)
-	elseif find(upper((opts or '')), 'CONFIG') then
-		addon.configpanel:Show()
-	elseif find(upper((opts or '')), 'ADD') then
-		addon.configpanel:Show()
-		addon.newspell_click()
-	else
-		InterfaceOptionsFrame_OpenToCategory('ActionButtonText')
+	if not UnitAffectingCombat('player') then
+		InterfaceOptionsFrame_OpenToFrame(addon.PresetsFrame.name)
 	end
 end

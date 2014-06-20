@@ -55,14 +55,11 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 -- Order the list based upon the default UIs priorities.
-local priorities = STANDARD_TOTEM_PRIORITIES
-if(select(2, UnitClass'player') == 'SHAMAN') then
-	priorities = SHAMAN_TOTEM_PRIORITIES
-end
+local priorities = TOTEM_PRIORITIES
 
 local UpdateTooltip = function(self)
 	GameTooltip:SetTotem(self:GetID())

@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 local colorTable = ns.colorTable
@@ -26,8 +25,8 @@ function frame:CreateOptions()
 	thesDDown:SetPoint('TOPLEFT', thresLabel, 'BOTTOMLEFT', -16, 0)
 
 	do
-		local DropDown_OnClick = function(self)
-			oGlowDB.FilterSettings.quality = self.value - 1
+		local DropDown_OnClick = function()
+			oGlowDB.FilterSettings.quality = this.value - 1
 			oGlow:CallOptionCallbacks()
 
 			for pipe, active, name, desc in oGlow.IteratePipes() do
@@ -35,11 +34,11 @@ function frame:CreateOptions()
 					oGlow:UpdatePipe(pipe)
 				end
 			end
-			UIDropDownMenu_SetSelectedID(self:GetParent().dropdown, self:GetID())
+			UIDropDownMenu_SetSelectedID(thesDDown, this:GetID())
 		end
 
-		local DropDown_OnEnter = function(self)
-			GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
+		local DropDown_OnEnter = function()
+			GameTooltip:SetOwner(this, 'ANCHOR_TOPLEFT')
 			GameTooltip:SetText('Controls the lowest item quality color that should be displayed.', nil, nil, nil, nil, 1)
 		end
 
@@ -58,9 +57,9 @@ function frame:CreateOptions()
 		local DropDown_init = function(self)
 			local info
 
-			for i=0,7 do
+			for i=0, 6 do
 				info = UIDropDownMenu_CreateInfo()
-				info.text = ns.Hex(colorTable[i]) .._G['ITEM_QUALITY' .. i .. '_DESC']
+				info.text = ns.Hex(colorTable[i]).._G['ITEM_QUALITY' .. i .. '_DESC']
 				info.value = i
 				info.func = DropDown_OnClick
 

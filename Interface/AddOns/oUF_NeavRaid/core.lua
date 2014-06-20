@@ -1,12 +1,12 @@
 
-local _, ns = ...
+local ns = oUFNeavRaid
 local config = ns.Config
 
 local playerClass = select(2, UnitClass('player'))
 
     -- oUF_AuraWatch
     -- Class buffs { spell ID, position [, {r, g, b, a}][, anyUnit][, hideCooldown][, hideCount] }
-    
+
 local indicatorList
 do
     indicatorList = {
@@ -14,13 +14,6 @@ do
             {774, 'BOTTOMRIGHT', {1, 0.2, 1}}, -- Rejuvenation
             {33763, 'BOTTOM', {0.5, 1, 0.5}, false, false, true}, -- Lifebloom
             {48438, 'BOTTOMLEFT', {0.7, 1, 0}}, -- Wild Growth
-        },
-        MONK = {
-            {119611, 'BOTTOMRIGHT', {0, 1, 0}}, -- Renewing Mist
-            {124682, 'BOTTOMLEFT', {0.15, 0.98, 0.64}}, -- Enveloping Mist
-            {115175, 'TOPRIGHT', {0.15, 0.98, 0.64}}, -- Soothing Mist
-            {116849, 'TOPLEFT', {1, 1, 0}}, -- Life Cocoon
-            {124081, 'BOTTOMLEFT', {0.7, 0.8, 1}}, -- Zen Sphere
         },
         PALADIN = {
             {53563, 'BOTTOMRIGHT', {0, 1, 0}}, -- Beacon of Light
@@ -42,7 +35,7 @@ do
         },
         ALL = {
             {23333, 'TOPLEFT', {1, 0, 0}}, -- Warsong flag, Horde
-            {23335, 'TOPLEFT', {0, 0, 1}}, -- Warsong flag, Alliance 
+            {23335, 'TOPLEFT', {0, 0, 1}}, -- Warsong flag, Alliance
         },
     }
 end
@@ -50,33 +43,33 @@ end
 --[[
 
     -- W    I   P
-    
+
 local inlist
 do
     inlist = {
         DRUID = {
             [1] = {
                 spellid = 774,  -- Rejuvenation
-                pos = 'BOTTOMRIGHT', 
+                pos = 'BOTTOMRIGHT',
                 color = {1, 0.2, 1}, -- custom color, set to nil if the spellicon should be shown
                 anyCaster = false,
                 hideCD = false,
                 hideCount = false,
                 priority = 'HIGH', -- to overlap other icons on this position
-            }, 
-            
+            },
+
             [2] = {
                 spellid = 33763,  -- Lifebloom
-                pos = 'BOTTOM', 
+                pos = 'BOTTOM',
                 color = {0.5, 1, 0.5},
                 anyCaster = false,
                 hideCD = false,
                 hideCount = true,
-            }, 
-            
+            },
+
             [3] = {
                 spellid = 48438,  -- Wild Growth
-                pos = 'BOTTOMLEFT', 
+                pos = 'BOTTOMLEFT',
                 color = {0.7, 1, 0},
                 anyCaster = false,
                 hideCD = false,
@@ -109,7 +102,7 @@ do
         },
         ALL = {
             {23333, 'TOPLEFT', {1, 0, 0}}, -- Warsong flag, Horde
-            {23335, 'TOPLEFT', {0, 0, 1}}, -- Warsong flag, Alliance 
+            {23335, 'TOPLEFT', {0, 0, 1}}, -- Warsong flag, Alliance
         },
 end
 ]]
@@ -240,7 +233,7 @@ local function UpdateThreat(self, _, unit)
     end
 
     local threatStatus = UnitThreatSituation(self.unit)
-    if (threatStatus == 3) then  
+    if (threatStatus == 3) then
         if (self.ThreatText) then
             self.ThreatText:Show()
         end
@@ -262,7 +255,7 @@ end
 
 local function UpdatePower(self, _, unit)
     if (self.unit ~= unit) then
-        return 
+        return
     end
 
     local _, powerToken = UnitPowerType(unit)
@@ -298,10 +291,10 @@ local function DeficitValue(self)
 end
 
 local function GetUnitStatus(unit)
-    if (UnitIsDead(unit)) then 
+    if (UnitIsDead(unit)) then
         return DEAD
     elseif (UnitIsGhost(unit)) then
-        return 'Ghost' 
+        return 'Ghost'
     elseif (not UnitIsConnected(unit)) then
         return PLAYER_OFFLINE
     else
@@ -339,7 +332,7 @@ local function CreateRaidLayout(self, unit)
 
     self:SetScript('OnEnter', function(self)
         UnitFrame_OnEnter(self)
-        
+
         if (self.Mouseover) then
             self.Mouseover:SetAlpha(0.175)
         end
@@ -347,7 +340,7 @@ local function CreateRaidLayout(self, unit)
 
     self:SetScript('OnLeave', function(self)
         UnitFrame_OnLeave(self)
-        
+
         if (self.Mouseover) then
             self.Mouseover:SetAlpha(0)
         end
@@ -376,7 +369,7 @@ local function CreateRaidLayout(self, unit)
     self.Health.frequentUpdates = true
 
     self.Health.colorClass = true
-    self.Health.colorDisconnected = true   
+    self.Health.colorDisconnected = true
 
     if (config.units.raid.smoothUpdates) then
         self.Health.Smooth = true
@@ -523,7 +516,7 @@ local function CreateRaidLayout(self, unit)
 
         -- Mouseover darklight
 
-    if (config.units.raid.showMouseoverHighlight) then    
+    if (config.units.raid.showMouseoverHighlight) then
         self.Mouseover = self.Health:CreateTexture(nil, 'OVERLAY')
         self.Mouseover:SetAllPoints(self.Health)
         self.Mouseover:SetTexture(config.media.statusbar)
@@ -559,14 +552,14 @@ local function CreateRaidLayout(self, unit)
         -- Masterlooter icons
 
     self.MasterLooter = self.Health:CreateTexture(nil, 'OVERLAY', self)
-    self.MasterLooter:SetSize(11, 11)
+    SetSize(self.MasterLooter, 11, 11)
     self.MasterLooter:SetPoint('RIGHT', self, 'TOPRIGHT', -1, 1)
 
         -- Main tank icon
 
     if (config.units.raid.showMainTankIcon) then
         self.MainTank = self.Health:CreateTexture(nil, 'OVERLAY')
-        self.MainTank:SetSize(12, 11)
+        SetSize(self.MainTank, 12, 11)
         self.MainTank:SetPoint('CENTER', self, 'TOP', 0, 1)
         self.MainTank:Hide()
     end
@@ -574,20 +567,20 @@ local function CreateRaidLayout(self, unit)
         -- Leader icons
 
     self.Leader = self.Health:CreateTexture(nil, 'OVERLAY', self)
-    self.Leader:SetSize(12, 12)
+    SetSize(self.Leader, 12, 12)
     self.Leader:SetPoint('LEFT', self.Health, 'TOPLEFT', 1, 0)
 
         -- Raid icons
 
     self.RaidIcon = self.Health:CreateTexture(nil, 'OVERLAY')
-    self.RaidIcon:SetSize(16, 16)
+    SetSize(self.RaidIcon, 16, 16)
     self.RaidIcon:SetPoint('CENTER', self, 'TOP')
 
         -- Readycheck icons
 
     self.ReadyCheck = self.Health:CreateTexture(nil, 'OVERLAY')
     self.ReadyCheck:SetPoint('CENTER')
-    self.ReadyCheck:SetSize(20, 20)
+    SetSize(self.ReadyCheck, 20, 20)
     self.ReadyCheck.delayTime = 2
     self.ReadyCheck.fadeTime = 1
 
@@ -605,7 +598,7 @@ local function CreateRaidLayout(self, unit)
 
     --[[
     self.LFDRole = self.Health:CreateTexture(nil, 'OVERLAY')
-    self.LFDRole:SetSize(12, 12)
+    SetSize(self.LFDRole, 12, 12)
     self.LFDRole:SetPoint('TOPLEFT', self.Health, -5, -5)
     --]]
 
@@ -633,13 +626,13 @@ local function CreateRaidLayout(self, unit)
 
             if (incomingResurrect) then
                 self.ResurrectIcon:Show()
-                
+
                 if (self.NotHere) then
                     self.NotHere:Hide()
                 end
             else
                 self.ResurrectIcon:Hide()
-                
+
                 if (self.NotHere) then
                     self.NotHere:Show()
                 end
@@ -657,7 +650,7 @@ local function CreateRaidLayout(self, unit)
         self.TargetBorder:SetTexture('Interface\\Addons\\oUF_NeavRaid\\media\\borderTarget')
         self.TargetBorder:SetVertexColor(unpack(config.units.raid.targetBorderColor))
         self.TargetBorder:Hide()
- 
+
         self:RegisterEvent('PLAYER_TARGET_CHANGED', function()
             if (UnitIsUnit('target', self.unit)) then
                 self.TargetBorder:Show()
@@ -683,7 +676,7 @@ local function CreateRaidLayout(self, unit)
 end
 
 local f = CreateFrame('Frame', 'oUF_Neav_Raid_Anchor', UIParent)
-f:SetSize(80, 80)
+SetSize(f, 80, 80)
 f:SetPoint('CENTER')
 f:SetFrameStrata('HIGH')
 f:SetMovable(true)
@@ -700,11 +693,11 @@ f.t:SetAllPoints(f)
 f.t:SetFont('Fonts\\ARIALN.ttf', 13)
 f.t:SetText('oUF_Neav Raid_Anchor "'..config.units.raid.layout.initialAnchor..'"')
 
-f:SetScript('OnDragStart', function(self) 
+f:SetScript('OnDragStart', function(self)
     self:StartMoving()
 end)
 
-f:SetScript('OnDragStop', function(self) 
+f:SetScript('OnDragStop', function(self)
     self:StopMovingOrSizing()
 end)
 
@@ -799,7 +792,7 @@ oUF:Factory(function(self)
                     raid[i]:SetPoint('TOPRIGHT', raid[i-1], 'TOPLEFT', -rlayout.frameSpacing, 0)
                 else
                     raid[i]:SetPoint('TOPRIGHT', raid[i-1], 'BOTTOMRIGHT', 0, -rlayout.frameSpacing)
-                end   
+                end
             elseif (rlayout.initialAnchor == 'BOTTOMLEFT') then
                 if (rlayout.orientation == 'HORIZONTAL') then
                     raid[i]:SetPoint('BOTTOMLEFT', raid[i-1], 'BOTTOMRIGHT', rlayout.frameSpacing, 0)
@@ -815,6 +808,6 @@ oUF:Factory(function(self)
             end
         end
 
-        raid[i]:SetScale(config.units.raid.scale) 
+        raid[i]:SetScale(config.units.raid.scale)
     end
 end)

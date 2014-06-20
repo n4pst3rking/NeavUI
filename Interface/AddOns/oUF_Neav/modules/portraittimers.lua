@@ -1,51 +1,34 @@
 
-local _, ns = ...
+local ns = oUFNeav
 local oUF = ns.oUF or oUF
 
 ns.PortraitTimerDB = {
 
-        -- Immunitys
-
+    -- Immunitys
     '45438',    -- Ice Block
     '33786',    -- Cyclone
     '642',      -- Divine Shield
     '1022',     -- Hand of Protection
     '19263',    -- Deterrence
-    '46924',    -- Bladestorm
 
-        -- Stuns
-
+    -- Stuns
     '408',      -- Kidney Shot
     '1833',     -- Cheap Shot
-    '46968',    -- Shockwave
     '853',      -- Hammer of Justice
-    '44572',    -- Deep Freeze
     '5211',     -- Bash
     '19503',    -- Scatter Shot
     '30283',    -- Shadowfury
-    '89766',    -- Axe Toss
     '22570',    -- Maim
     '9005',     -- Pounce
-    '47481',    -- Gnaw
     '1776',     -- Gouge
     '6770',     -- Sap
-    '87195',    -- Paralysis
-    '88625',    -- Holy Word: Chastise   
-    '90337',    -- Bad Manner (monkey stun)   
-    '65929',    -- Charge Stun
-    '91797',    -- Monstrous Blow (Gnaw with DT)
 
-        -- CC
-
-    '91807',    -- Shambling Rush (Leap with DT)
-    '87100',    -- Sin and Punishment
+    -- CC
     '1513',     -- Scare Beast
     '2637',     -- Hibernate
     '605',      -- Mind Control
-    '64044',    -- Psychic Horror
     '2094',     -- Blind
     '118',      -- Polymorph
-    '51514',    -- Hex
     '6789',     -- Death Coil
     '5246',     -- Intimidating Shout 
     '8122',     -- Psychic Scream
@@ -58,20 +41,16 @@ ns.PortraitTimerDB = {
     '8377',     -- Earthgrab
     '31661',    -- Dragon's Breath
     '16689',    -- Nature's Grasp
-    '82691',    -- Ring of Frost
-    '76780',    -- Bind Elemental
     '19387',    -- Entrapment
 
-        -- CC immune
-
+    -- CC immune
     '53271',    -- Master's Call
     '1044',     -- Hand of Freedom
     '31224',    -- Cloak of Shadows
     '51271',    -- Pillar of Frost
     '31821',    -- Aura Mastery
 
-        -- Dmg reductions
-
+    -- Dmg reductions
     '48707',    -- Anti-Magic Shell
     '30823',    -- Shamanistic Rage 
     '33206',    -- Pain Suppression
@@ -85,8 +64,7 @@ ns.PortraitTimerDB = {
     '74001',    -- Combat Readiness
     '47788',    -- Guardian Spirit
 
-        -- Silences
-
+    -- Silences
     '47476',    -- Strangulate
     '1330',     -- Garrote - Silence
     '55021',    -- Silenced - Improved Counterspell
@@ -95,19 +73,17 @@ ns.PortraitTimerDB = {
     '34490',    -- Silencing Shot
     '28730',    -- Arcane Torrent
 
-        -- Disarms
-
+    -- Disarms
     '676',      -- Disarm
     '51722',    -- Dismantle
 
-        -- Dmg buffs  
-
+    -- Dmg buffs
     '34692',    -- The Beast Within
     '31884',    -- Avenging Wrath
-    '51713',    -- Shadow Dance 
+    '51713',    -- Shadow Dance
+    '2825',     -- Bloodlust
 
-        -- Helpful buffs
-
+    -- Helpful buffs
     '6940',     -- Hand of Sacrifice
     '89488',    -- Strength of Soul
     '23920',    -- Spell Reflection (warrior)
@@ -160,68 +136,70 @@ local function AuraTimer(self, elapsed)
 end
 
 local function UpdateIcon(self, texture, duration, expires)
-    SetPortraitToTexture(self.Icon, texture)
+  SetPortraitToTexture(self.Icon, texture)
 
-    self.expires = expires
-    self.duration = duration
-    self:SetScript('OnUpdate', AuraTimer)
+  self.expires = expires
+  self.duration = duration
+  self:SetScript('OnUpdate', AuraTimer)
 end
 
 local Update = function(self, event, unit)
-    if (self.unit ~= unit) then 
-        return 
-    end
+  if (self.unit ~= unit) then 
+    return 
+  end
 
-    local pt = self.PortraitTimer
-    for _, spellID in ipairs(ns.PortraitTimerDB) do
-        local spell = GetSpellInfo(spellID)
-        if (UnitBuff(unit, spell)) then
-            local name, _, texture, _, _, duration, expires = UnitBuff(unit, spell)
-            UpdateIcon(pt, texture, duration, expires)
-
-            pt:Show()
-
-            if (self.CombatFeedbackText) then
-                self.CombatFeedbackText.maxAlpha = 0
-            end
-
-            return
-        elseif (UnitDebuff(unit, spell)) then
-            local name, _, texture, _, _, duration, expires = UnitDebuff(unit, spell)
-            UpdateIcon(pt, texture, duration, expires)
-
-            pt:Show()
-
-            if (self.CombatFeedbackText) then
-                self.CombatFeedbackText.maxAlpha = 0
-            end
-
-            return
-        else
-            if (pt:IsShown()) then
-                pt:Hide()
-            end
-
-            if (self.CombatFeedbackText) then
-                self.CombatFeedbackText.maxAlpha = 1
-            end
+  local pt = self.PortraitTimer
+  for _, spellID in ipairs(ns.PortraitTimerDB) do
+    local spell = GetSpellInfo(spellID)
+    for i = 1, 40 do
+      if (spell and UnitBuff(unit, i) == spell) then
+        local name, _, texture, _, duration, expires = UnitBuff(unit, i)
+        UpdateIcon(pt, texture, duration, expires)
+  
+        pt:Show()
+  
+        if (self.CombatFeedbackText) then
+          self.CombatFeedbackText.maxAlpha = 0
         end
+  
+        return
+      elseif (spell and UnitDebuff(unit, i) == spell) then
+        local name, _, texture, _, _, duration, expires = UnitDebuff(unit, i)
+        UpdateIcon(pt, texture, duration, expires)
+  
+        pt:Show()
+  
+        if (self.CombatFeedbackText) then
+          self.CombatFeedbackText.maxAlpha = 0
+        end
+  
+        return
+      else
+        if (pt:IsShown()) then
+            pt:Hide()
+        end
+  
+        if (self.CombatFeedbackText) then
+          self.CombatFeedbackText.maxAlpha = 1
+        end
+      end
     end
+  end
 end
 
 local Enable = function(self)
-    local pt = self.PortraitTimer
-    if (pt) then
-        self:RegisterEvent('UNIT_AURA', Update)
-        return true
-    end
+  local pt = self.PortraitTimer
+  if (pt) then
+    self:RegisterEvent('UNIT_AURA', Update)
+    return true
+  end
 end
 
 local Disable = function(self)
-    local pt = self.PortraitTimer
-    if (pt) then
-        self:UnregisterEvent('UNIT_AURA', Update)
-    end
+  local pt = self.PortraitTimer
+  if (pt) then
+    self:UnregisterEvent('UNIT_AURA', Update)
+  end
 end
 
 oUF:AddElement('PortraitTimer', Update, Enable, Disable)

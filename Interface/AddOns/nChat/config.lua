@@ -1,14 +1,12 @@
-
-local _, nChat = ...
+nChat = {}
 
 nChat.Config = {
-    disableFade = false,
     chatOutline = false,
 
     enableChatWindowBorder = false,
 
-    enableBottomButton = false, 
-    enableHyperlinkTooltip = false, 
+    enableBottomButton = true, 
+    enableHyperlinkTooltip = true, 
     enableBorderColoring = true,
 
     showInputBoxAbove = true,  -- Show the chat input box above the chat window
@@ -20,4 +18,9 @@ nChat.Config = {
         specialColor = {1, 0, 1},
         selectedColor = {0, 0.75, 1},
     },
+    
+    scroll = {
+      shiftJump = true,
+      speed = 2
+    }
 }

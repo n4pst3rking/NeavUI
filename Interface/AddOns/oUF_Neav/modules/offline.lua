@@ -1,5 +1,4 @@
-
-local parent, ns = ...
+local ns = oUFNeav
 local oUF = ns.oUF or _G.oUF
 
 local Update = function(self, event, unit)

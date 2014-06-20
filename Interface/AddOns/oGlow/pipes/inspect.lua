@@ -8,7 +8,7 @@ local _E
 local slots = {
 	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-	"SecondaryHand", [19] = "Tabard",
+	"SecondaryHand", "Ranged", [19] = "Tabard",
 }
 
 local _MISSING = {}
@@ -72,7 +72,7 @@ local function ADDON_LOADED(self, event, addon)
 		-- We should check the first argument of this event later on.
 		-- Blizzard's code isn't actually updated yet, so it doesn't
 		-- check if the GUID is correct, nor if the inspect is ready.
-		self:RegisterEvent('INSPECT_READY', update)
+		self:RegisterEvent('INSPECT_TALENT_READY', update)
 
 		self:UnregisterEvent("ADDON_LOADED", ADDON_LOADED)
 	end

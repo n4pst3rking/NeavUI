@@ -1,15 +1,12 @@
-
-local _, nChat = ...
 local cfg = nChat.Config
 
-    -- Mouseover Itemlinks in the chat
-    -- Code provided by the Tukui crew (Tukui.org)
+-- Mouseover Itemlinks in the chat
+-- Code provided by the Tukui crew (Tukui.org)
 
 if (not cfg.enableHyperlinkTooltip) then 
     return 
 end
 
-local _G = getfenv(0)
 local orig1, orig2 = {}, {}
 local GameTooltip = GameTooltip
 
@@ -19,46 +16,43 @@ local linktypes = {
     spell = true, 
     quest = true, 
     unit = true, 
-    talent = true, 
-    achievement = true, 
-    glyph = true
+    talent = true
 }
 
 local function OnHyperlinkEnter(frame, link, ...)
-    local linktype = link:match('^([^:]+)')
-    if (linktype and linktypes[linktype]) then
-        GameTooltip:SetOwner(ChatFrame1, 'ANCHOR_CURSOR', 0, 20)
-        GameTooltip:SetHyperlink(link)
-        GameTooltip:Show()
-    else
-        GameTooltip:Hide()
-    end
+  local linktype = link:match('^([^:]+)')
+  if (linktype and linktypes[linktype]) then
+    GameTooltip:SetOwner(this, 'ANCHOR_CURSOR', 0, 20)
+    GameTooltip:SetHyperlink(link)
+    GameTooltip:Show()
+  else
+    GameTooltip:Hide()
+  end
 
-    if (orig1[frame]) then 
-        return orig1[frame](frame, link, ...) 
-    end
+  if (orig1[frame]) then 
+    return orig1[frame](frame, link, ...) 
+  end
 end
 
 local function OnHyperlinkLeave(frame, ...)
-    GameTooltip:Hide()
+  GameTooltip:Hide()
 
-    if (orig2[frame]) then 
-        return orig2[frame](frame, ...) 
-    end
+  if (orig2[frame]) then 
+    return orig2[frame](frame, ...) 
+  end
 end
 
 local function EnableItemLinkTooltip()
-    for _, v in pairs(CHAT_FRAMES) do
-        local chat = _G[v]
-        if (chat and not chat.URLCopy) then
-            orig1[chat] = chat:GetScript('OnHyperlinkEnter')
-            chat:SetScript('OnHyperlinkEnter', OnHyperlinkEnter)
+  for i = 1, NUM_CHAT_WINDOWS do
+    local chat = _G['ChatFrame'..i]
+    if (chat and not chat.URLCopy) then
+        orig1[chat] = chat:GetScript('OnHyperlinkEnter')
+        chat:SetScript('OnHyperlinkEnter', OnHyperlinkEnter)
 
-            orig2[chat] = chat:GetScript('OnHyperlinkLeave')
-            chat:SetScript('OnHyperlinkLeave', OnHyperlinkLeave)
-            chat.URLCopy = true
-        end
+        orig2[chat] = chat:GetScript('OnHyperlinkLeave')
+        chat:SetScript('OnHyperlinkLeave', OnHyperlinkLeave)
+        chat.URLCopy = true
     end
+  end
 end
-hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
 EnableItemLinkTooltip()

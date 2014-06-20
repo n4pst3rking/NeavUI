@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 20400
 ## Title: |cffCC3333 n|rMainBar
 ## Notes: Yet another Blizzbar mod
 
@@ -16,7 +16,7 @@ modules\hotkey.lua
 modules\petbar.lua
 modules\possessbar.lua
 modules\repbar.lua
-modules\stancebar.lua
+modules\shapeshiftbar.lua
 modules\mouseover.lua
 modules\slash.lua
 modules\picomenu.lua

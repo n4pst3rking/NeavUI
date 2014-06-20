@@ -1,5 +1,3 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
     -- experience bar mouseover text

@@ -2,7 +2,7 @@
 -- Credits: Vika, Cladhaire, Tekkub
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local _PATTERN = '%[..-%]+'
@@ -183,13 +183,8 @@ local tagStrings = {
 	end]],
 
 	["cpoints"] = [[function(u)
-		local cp
-		if(UnitHasVehicleUI'player') then
-			cp = GetComboPoints('vehicle', 'target')
-		else
-			cp = GetComboPoints('player', 'target')
-		end
-
+		local cp = GetComboPoints()
+		
 		if(cp > 0) then
 			return cp
 		end
@@ -377,7 +372,7 @@ local tagEvents = {
 	["smartlevel"]          = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED",
 	["threat"]              = "UNIT_THREAT_SITUATION_UPDATE",
 	["threatcolor"]         = "UNIT_THREAT_SITUATION_UPDATE",
-	['cpoints']             = 'UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED',
+	['cpoints']             = 'PLAYER_COMBO_POINTS PLAYER_TARGET_CHANGED',
 	['affix']				= 'UNIT_CLASSIFICATION_CHANGED',
 	['plus']				= 'UNIT_CLASSIFICATION_CHANGED',
 	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
@@ -408,7 +403,7 @@ local unitlessEvents = {
 
 	GROUP_ROSTER_UPDATE = true,
 
-	UNIT_COMBO_POINTS = true
+	PLAYER_COMBO_POINTS = true
 }
 
 local events = {}

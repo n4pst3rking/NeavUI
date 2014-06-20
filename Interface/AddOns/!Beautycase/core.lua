@@ -42,7 +42,7 @@ local function GetBeautyBorderInfo(self)
         print(formatName..' error:|r This frame does not exist!') 
     elseif (self.beautyBorder) then
         local tex = self.beautyBorder[1]:GetTexture()
-        local size = self.beautyBorder[1]:GetSize()
+        local size = self.beautyBorder[1]:GetWidth()
         local r, g, b, a = self.beautyBorder[1]:GetVertexColor()
 
         return size, tex, r, g, b, a
@@ -162,10 +162,10 @@ local function SetBeautyBorderSize(self, size)
     if (not self) then
         print(formatName..' error:|r This frame does not exist!') 
     elseif (self.beautyShadow) then
-        for i = 1, 8 do
-            self.beautyBorder[i]:SetSize(size, size) 
-            self.beautyShadow[i]:SetSize(size, size) 
-        end
+      for i = 1, 8 do
+        self.beautyBorder[i]:SetSize(size, size) 
+        self.beautyShadow[i]:SetSize(size, size) 
+      end
     else
         print(formatName..' error:|r Invalid frame! This object has no '..addonName..' border')  
     end
@@ -234,7 +234,7 @@ local function FuncCreateBorder(self, borderSize, R, G, B, uL1, ...)
             self.beautyShadow[i] = self:CreateTexture(nil, 'BORDER')
             self.beautyShadow[i]:SetParent(self)
             self.beautyShadow[i]:SetTexture(textureShadow)
-            self.beautyShadow[i]:SetSize(borderSize, borderSize)  
+            SetSize(self.beautyShadow[i], borderSize, borderSize)  
             self.beautyShadow[i]:SetVertexColor(0, 0, 0, 1)
         end
 
@@ -243,7 +243,7 @@ local function FuncCreateBorder(self, borderSize, R, G, B, uL1, ...)
             self.beautyBorder[i] = self:CreateTexture(nil, 'OVERLAY')
             self.beautyBorder[i]:SetParent(self)
             self.beautyBorder[i]:SetTexture(textureNormal)
-            self.beautyBorder[i]:SetSize(borderSize, borderSize) 
+            SetSize(self.beautyBorder[i], borderSize, borderSize)  
             self.beautyBorder[i]:SetVertexColor(R or 1, G or 1, B or 1)
         end
 

@@ -1,6 +1,4 @@
-
-local _, ns = ...
-
+local ns = oUFNeav
 local flashObjects = {}
 local f = CreateFrame('Frame')
 

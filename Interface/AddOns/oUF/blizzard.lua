@@ -1,4 +1,4 @@
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local hiddenParent = CreateFrame("Frame")
@@ -56,7 +56,7 @@ function oUF:DisableBlizzard(unit)
 
 		-- User placed frames don't animate
 		PlayerFrame:SetUserPlaced(true)
-		PlayerFrame:SetDontSavePosition(true)
+--		PlayerFrame:SetDontSavePosition(true)
 	elseif(unit == 'pet') then
 		HandleFrame(PetFrame)
 	elseif(unit == 'target') then
@@ -97,6 +97,6 @@ function oUF:DisableBlizzard(unit)
 
 		-- Blizzard_ArenaUI should not be loaded
 		Arena_LoadUI = function() end
-		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
+--		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
 	end
 end

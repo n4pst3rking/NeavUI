@@ -1,6 +1,4 @@
-
-local _, ns = ...
-
+local ns = oUFNeav
 local function FormatValue(value)
     if (value >= 1e6) then
         return tonumber(format('%.1f', value/1e6))..'m'
@@ -22,11 +20,7 @@ oUF.Tags.Methods['druidmana'] = function(unit)
 end
 
 oUF.Tags.Methods['pvptimer'] = function(unit)
-    if (not IsPVPTimerRunning() and GetPVPTimer() >= 0) then
-        return ''
-    end
-
-    return ns.FormatTime(math.floor(GetPVPTimer()/1000))
+  return ''
 end
 
 oUF.Tags.Methods['level'] = function(unit)
@@ -85,16 +79,4 @@ oUF.Tags.Methods['name'] = function(unit)
         -- return format('|cff%02x%02x%02x%s|r', r*255, g*255, b*255, string.gsub(unitName, '%s(.[\128-\191]*)%S+%S', ' %1.'))     -- abbrev all words except the first
     -- end
     -- return format('|cff%02x%02x%02x%s|r', r*255, g*255, b*255, string.gsub(unitName, '%s?(.[\128-\191]*)%S+%s', '%1. '))   -- abbrev all words except the last
-end
-
-oUF.Tags.Events['combopoints'] = 'UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED'
-oUF.Tags.Methods['combopoints'] = function(unit)
-    local cp
-    if (UnitHasVehicleUI('player')) then
-        cp = GetComboPoints('vehicle', 'target')
-    else
-        cp = GetComboPoints('player', 'target')
-    end
-
-    return cp == 0 and '' or cp
 end

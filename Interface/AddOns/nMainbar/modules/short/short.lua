@@ -1,5 +1,3 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
 if (not cfg.MainMenuBar.shortBar) then
@@ -90,33 +88,44 @@ end
 
     -- remove divider
 
-for i = 1, 19, 2 do
-    for _, object in pairs({
-        _G['MainMenuXPBarDiv'..i],
-    }) do
-        hooksecurefunc(object, 'Show', function(self)
-            self:Hide()
-        end)
+-- for i = 1, 19, 2 do
+    -- for _, object in pairs({
+        -- _G['MainMenuXPBarDiv'..i],
+    -- }) do
+        -- hooksecurefunc(object, 'Show', function(self)
+            -- self:Hide()
+        -- end)
 
-        object:Hide()
-    end
-end
+        -- object:Hide()
+    -- end
+-- end
 
-hooksecurefunc(_G['MainMenuXPBarDiv2'], 'Show', function(self)
-    local divWidth = MainMenuExpBar:GetWidth() / 10
-    local xpos = divWidth - 4.5
-
-    for i = 2, 19, 2 do
-        local texture = _G['MainMenuXPBarDiv'..i]
-        local xalign = floor(xpos)
-        texture:SetPoint('LEFT', xalign, 1)
-        xpos = xpos + divWidth
-    end
+hooksecurefunc(_G['MainMenuXPBarTexture1'], 'Show', function(self)
+  local divWidth = 256 -- Texture Dimension, from MainMenuBar.xml#38
+  local xpos = 0
+  for i = 0, 3 do
+    local texture = _G['MainMenuXPBarTexture'..i]
+    local xalign = floor(xpos)
+    texture:SetPoint('LEFT', xalign, 1)
+    xpos = xpos + divWidth
+  end
 end)
 
-_G['MainMenuXPBarDiv2']:Show()
+_G['MainMenuXPBarTexture1']:Show()
 
-    -- fix the exp bar size when exiting vehicle
+-- hooksecurefunc(_G['MainMenuXPBarDiv2'], 'Show', function(self)
+    -- local divWidth = MainMenuExpBar:GetWidth() / 10
+    -- local xpos = divWidth - 4.5
+
+    -- for i = 2, 19, 2 do
+        -- local texture = _G['MainMenuXPBarDiv'..i]
+        -- local xalign = floor(xpos)
+        -- texture:SetPoint('LEFT', xalign, 1)
+        -- xpos = xpos + divWidth
+    -- end
+-- end)
+
+-- _G['MainMenuXPBarDiv2']:Show()
 
 -- XXX: Not need anymore?
 --MainMenuExpBar:HookScript('OnSizeChanged', function(self, width, height)
@@ -152,16 +161,9 @@ MainMenuBarRightEndCap.SetPoint = function() end
 CharacterMicroButton:ClearAllPoints()
 CharacterMicroButton:SetPoint('BOTTOMLEFT', UIParent, 9000, 9000)
 
-hooksecurefunc('MoveMicroButtons', function(anchor, achorTo, relAnchor, x, y, isStacked)
+hooksecurefunc('CharacterMicroButton_OnLoad', function(anchor, achorTo, relAnchor, x, y, isStacked)
     if (not isStacked) then
         CharacterMicroButton:ClearAllPoints()
         CharacterMicroButton:SetPoint('BOTTOMLEFT', UIParent, 9000, 9000)
     end
-end)
-
-    -- a new place for the exit vehicle button
-
-MainMenuBarVehicleLeaveButton:HookScript('OnShow', function(self)
-    self:ClearAllPoints()
-    self:SetPoint('LEFT', MainMenuBar, 'RIGHT', 10, 75)
 end)

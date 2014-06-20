@@ -13,8 +13,6 @@
  .disableCooldown    - Disables the cooldown spiral. Defaults to false.
  .size               - Aura icon size. Defaults to 16.
  .onlyShowPlayer     - Only show auras created by player/vehicle.
- .showStealableBuffs - Display the stealable texture on buffs that can be
-                       stolen.
  .spacing            - Spacing between each icon. Defaults to 0.
  .['spacing-x']      - Horizontal spacing between each icon. Takes priority over
                        `spacing`.
@@ -59,14 +57,18 @@
 
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local VISIBLE = 1
 local HIDDEN = 0
 
 local UpdateTooltip = function(self)
-	GameTooltip:SetUnitAura(self:GetParent().__owner.unit, self:GetID(), self.filter)
+  if self.isDebuff then
+	  GameTooltip:SetUnitDebuff(self:GetParent().__owner.unit, self:GetID(), self.filter)
+	else
+	  GameTooltip:SetUnitBuff(self:GetParent().__owner.unit, self:GetID(), self.filter)
+	end
 end
 
 local OnEnter = function(self)
@@ -102,13 +104,6 @@ local createAuraIcon = function(icons, index)
 	overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 	button.overlay = overlay
 
-	local stealable = button:CreateTexture(nil, 'OVERLAY')
-	stealable:SetTexture[[Interface\TargetingFrame\UI-TargetingFrame-Stealable]]
-	stealable:SetPoint('TOPLEFT', -3, 3)
-	stealable:SetPoint('BOTTOMRIGHT', 3, -3)
-	stealable:SetBlendMode'ADD'
-	button.stealable = stealable
-
 	button.UpdateTooltip = UpdateTooltip
 	button:SetScript("OnEnter", OnEnter)
 	button:SetScript("OnLeave", OnLeave)
@@ -132,14 +127,17 @@ local createAuraIcon = function(icons, index)
 	return button
 end
 
-local customFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
-	if((icons.onlyShowPlayer and icon.isPlayer) or (not icons.onlyShowPlayer and name)) then
-		return true
-	end
+local customFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft)
+	return true
 end
 
 local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visible)
-	local name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura(unit, index, filter)
+  local name, rank, texture, count, dtype, duration, timeLeft --, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff
+  if isDebuff then
+    name, rank, texture, count, dtype, duration, timeLeft = UnitDebuff(unit, index, filter)
+  else
+    name, rank, texture, count, duration, timeLeft = UnitBuff(unit, index, filter)
+  end
 	if(name) then
 		local n = visible + offset + 1
 		local icon = icons[n]
@@ -159,15 +157,8 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			icon = (icons.CreateIcon or createAuraIcon) (icons, n)
 		end
 
-		local isPlayer
-		if(caster == 'player' or caster == 'vehicle') then
-			isPlayer = true
-		end
-
-		icon.owner = caster
 		icon.filter = filter
 		icon.isDebuff = isDebuff
-		icon.isPlayer = isPlayer
 
 
 		--[[ :CustomFilter(unit, icon, ...)
@@ -188,7 +179,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 		 A boolean value telling the aura element if it should be show the icon
 		 or not.
 		]]
-		local show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+		local show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft)
 		if(show) then
 			-- We might want to consider delaying the creation of an actual cooldown
 			-- object to this point, but I think that will just make things needlessly
@@ -196,7 +187,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			local cd = icon.cd
 			if(cd and not icons.disableCooldown) then
 				if(duration and duration > 0) then
-					cd:SetCooldown(timeLeft - duration, duration)
+					cd:SetCooldown(GetTime()-(duration-timeLeft), duration)
 					cd:Show()
 				else
 					cd:Hide()
@@ -212,18 +203,11 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 				icon.overlay:Hide()
 			end
 
-			local stealable = not isDebuff and isStealable
-			if(stealable and icons.showStealableBuffs and not UnitIsUnit('player', unit)) then
-				icon.stealable:Show()
-			else
-				icon.stealable:Hide()
-			end
-
 			icon.icon:SetTexture(texture)
 			icon.count:SetText((count > 1 and count))
 
 			local size = icons.size or 16
-			icon:SetSize(size, size)
+			SetSize(icon, size, size)
 
 			icon:EnableMouse(true)
 			icon:SetID(index)
@@ -336,7 +320,6 @@ local UpdateAuras = function(self, event, unit)
 			icon:EnableMouse(false)
 			icon.icon:SetTexture()
 			icon.overlay:Hide()
-			icon.stealable:Hide()
 			icon.count:SetText()
 			icon:Show()
 

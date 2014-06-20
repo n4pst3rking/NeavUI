@@ -1,7 +1,7 @@
-## Interface: 50400
+## Interface: 20400
 ## Author: Neav
 ## Title: oUF_|cffCC3333N|r|cffE53300e|r|cffFF4D00a|r|cffFF6633v|r
-## RequiredDeps: oUF, !Beautycase
+## RequiredDeps: oUF, !Beautycase, bUtils
 ## OptionalDeps: oUF_AuraWatch, oUF_SpellRange, oUF_CombatFeedback, oUF_Smooth, oUF_Swing, oUF_Vengeance
 
 config.lua
@@ -22,5 +22,4 @@ kill.lua
 tags.lua
 castbar.lua
 core.lua
-boss.lua
 arena.lua

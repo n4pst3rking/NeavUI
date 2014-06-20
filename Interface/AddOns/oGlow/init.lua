@@ -1,4 +1,4 @@
-local _, ns = ...
+ns = {}
 ns.oGlow = {}
 
 function ns.oGlow.argcheck(value, num, ...)

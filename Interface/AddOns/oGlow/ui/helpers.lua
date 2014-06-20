@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 ns.createFontString = function(parent, template)
@@ -101,18 +100,20 @@ do
 		OpenColorPicker(self)
 	end
 
+  local createdSwatches = 0
 	ns.createColorSwatch = function(self)
-		local swatch = CreateFrame('Button', nil, self)
-		swatch:SetSize(16, 16)
+	  createdSwatches = createdSwatches + 1
+		local swatch = CreateFrame('Button', 'oGlowBtnColorSwatch'..createdSwatches, self)
+		SetSize(swatch, 16, 16)
 
 		local background = swatch:CreateTexture(nil, 'BACKGROUND')
-		background:SetSize(14, 14)
-		background:SetPoint'CENTER'
+		SetSize(background, 14, 14)
+		background:SetPoint('CENTER')
 		background:SetTexture(.3, .3, .3)
 
 		swatch:SetNormalTexture[[Interface\ChatFrame\ChatFrameColorSwatch]]
 
-		swatch:SetScript('OnClick', OnClick)
+		subscribe(swatch, 'OnClick', OnClick)
 
 		return swatch
 	end

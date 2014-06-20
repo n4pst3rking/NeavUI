@@ -2,7 +2,7 @@
     -- THANKS & CREDITS GOES TO Freebaser (oUF Freebgrid)
     -- http://www.wowinterface.com/downloads/info12264-oUF_Freebgrid.html
 
-local _, ns = ...
+local ns = oUFNeavRaid
 local oUF = ns.oUF or oUF
 
 local _, class = UnitClass('player')
@@ -120,12 +120,6 @@ local dispelClass = {
         -- Disease = true,
         -- Magic = true,
     },
-    MONK = {
-        -- Curse = true,
-        Poison = true,
-        Disease = true,
-        -- Magic = true,
-    },
     DRUID = {
         Curse = true,
         Poison = true,
@@ -134,12 +128,6 @@ local dispelClass = {
     },
     --[[
     WARRIOR = {
-        Curse = true,
-        Poison = true,
-        Magic = true,
-        Disease = true,
-    },
-    DEATHKNIGHT = {
         Curse = true,
         Poison = true,
         Magic = true,
@@ -171,19 +159,16 @@ checkTalents:RegisterEvent('PLAYER_ENTERING_WORLD')
 checkTalents:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
 checkTalents:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
 checkTalents:RegisterEvent('CHARACTER_POINTS_CHANGED')
-checkTalents:SetScript('OnEvent', function()
-    if (ns.MultiCheck(class, 'SHAMAN', 'PALADIN', 'DRUID', 'PRIEST', 'MONK')) then
-        local spec = GetSpecialization()
+checkTalents:SetScript('OnEvent', function(self)
+    if (ns.MultiCheck(class, 'SHAMAN', 'PALADIN', 'DRUID', 'PRIEST')) then
         if (class == 'SHAMAN') then
-            dispelClass[class].Magic = spec == 3 and true
+            dispelClass[class].Magic = true
         elseif (class == 'PALADIN') then
-            dispelClass[class].Magic = spec == 1 and true
+            dispelClass[class].Magic = true
         elseif (class == 'DRUID') then
-            dispelClass[class].Magic = spec == 4 and true
+            dispelClass[class].Magic = true
         elseif (class == 'PRIEST') then
-            dispelClass[class].Disease = (spec == 1 or spec == 2) and true
-        elseif (class == 'MONK') then
-            dispelClass[class].Magic = spec == 2 and true
+            dispelClass[class].Disease = true
         end
     end
 

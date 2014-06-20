@@ -1,13 +1,11 @@
-
-local _, nMainbar = ...
+nMainbar = {}
 
 nMainbar.Config = {
     showPicomenu = true,
 
-    button = { 
-        showVehicleKeybinds = true,
-        showKeybinds = false,
-        showMacronames = false,
+    button = {
+        showKeybinds = true,
+        showMacronames = true,
 
         countFontsize = 19,
         countFont = 'Interface\\AddOns\\nMainbar\\media\\font.ttf',
@@ -46,17 +44,13 @@ nMainbar.Config = {
     },
 
     MainMenuBar = {
-        scale = 1,
+        scale = 0.8,
         hideGryphons = false,
 
         shortBar = true,
         skinButton = true,
 
-        moveableExtraBars = false,      -- Make the pet, possess, shapeshift and totembar moveable, even when the mainmenubar is not "short"
-    },
-
-    vehicleBar = {
-        scale = 0.8,
+        moveableExtraBars = true,      -- Make the pet, possess, shapeshift and totembar moveable, even when the mainmenubar is not "short"
     },
 
     petBar = {
@@ -72,12 +66,13 @@ nMainbar.Config = {
         alpha = 1,
     },
 
-    stanceBar = {
+    shapeshiftBar = {
         mouseover = false,
         hide = false,
-        scale = 1,
+        scale = 1.1,
         alpha = 1,
         hiddenAlpha = 0,
+        -- position = { 'BOTTOMLEFT', UIParent, 'CENTER', 10, 3 }
     },
 
     multiBarLeft = {
@@ -88,7 +83,7 @@ nMainbar.Config = {
     },
 
     multiBarRight = {
-        mouseover = true,
+        mouseover = false,
         hiddenAlpha = 0,
         alpha = 1,
         orderHorizontal = false,

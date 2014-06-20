@@ -1,4 +1,7 @@
-local _, addon = ... -- namespace
+abtNS = {}
+local addon = abtNS
+local strupper = strupper
+local GetSpellInfo = GetSpellInfo
 
 addon.battleshout = strupper(GetSpellInfo(2048) or '')  
 addon.rend = strupper(GetSpellInfo(25208) or '') 
@@ -19,15 +22,3 @@ addon.lshield = strupper(GetSpellInfo(25472) or '')
 addon.fblast = strupper(GetSpellInfo(27079) or '')
 addon.manatap = strupper(GetSpellInfo(28734) or '')
 addon.rbandaged = strupper(GetSpellInfo(11196) or '')
-addon.icytouch = strupper(GetSpellInfo(45477) or '')
-addon.plaguestrike = strupper(GetSpellInfo(45462) or '')
-addon.bloodplague = strupper(GetSpellInfo(55078) or '')
-addon.frostfever = strupper(GetSpellInfo(55095) or '')
-addon.obliterate = strupper(GetSpellInfo(49020) or '')
-addon.deathstrike = strupper(GetSpellInfo(49998) or '')
-addon.bloodstrike = strupper(GetSpellInfo(45902) or '')
-addon.heartstrike = strupper(GetSpellInfo(55050) or '')
-addon.scourgestrike = strupper(GetSpellInfo(55090) or '')
-addon.howlingblast = strupper(GetSpellInfo(49184) or '')
--- All spells DKs get a bonus for diseases on...
-addon.spells_disease = addon.obliterate .. '~' .. addon.deathstrike .. '~' .. addon.bloodstrike .. '~' .. addon.heartstrike .. '~' .. addon.scourgestrike

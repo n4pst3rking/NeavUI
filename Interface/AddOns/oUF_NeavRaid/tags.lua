@@ -1,5 +1,5 @@
 
-local _, ns = ...
+local ns = oUFNeavRaid
 local config = ns.Config
 
 local timer = {}

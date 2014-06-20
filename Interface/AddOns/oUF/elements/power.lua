@@ -93,7 +93,7 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 oUF.colors.power = {}
@@ -107,19 +107,6 @@ oUF.colors.power[0] = oUF.colors.power["MANA"]
 oUF.colors.power[1] = oUF.colors.power["RAGE"]
 oUF.colors.power[2] = oUF.colors.power["FOCUS"]
 oUF.colors.power[3] = oUF.colors.power["ENERGY"]
-oUF.colors.power[4] = oUF.colors.power["CHI"]
-oUF.colors.power[5] = oUF.colors.power["RUNES"]
-oUF.colors.power[6] = oUF.colors.power["RUNIC_POWER"]
-oUF.colors.power[7] = oUF.colors.power["SOUL_SHARDS"]
-oUF.colors.power[8] = oUF.colors.power["ECLIPSE"]
-oUF.colors.power[9] = oUF.colors.power["HOLY_POWER"]
-
-local GetDisplayPower = function(power, unit)
-	local _, _, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
-	if(showOnRaid) then
-		return ALTERNATE_POWER_INDEX
-	end
-end
 
 local Update = function(self, event, unit)
 	if(self.unit ~= unit) then return end
@@ -127,8 +114,7 @@ local Update = function(self, event, unit)
 
 	if(power.PreUpdate) then power:PreUpdate(unit) end
 
-	local displayType = power.displayAltPower and GetDisplayPower(power, unit)
-	local min, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
+	local min, max = UnitMana(unit), UnitManaMax(unit)
 	local disconnected = not UnitIsConnected(unit)
 	power:SetMinMaxValues(0, max)
 
@@ -142,20 +128,17 @@ local Update = function(self, event, unit)
 
 	local r, g, b, t
 	if(power.colorTapping and not UnitPlayerControlled(unit) and
-		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not
-		UnitIsTappedByAllThreatList(unit)) then
+		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 		t = self.colors.tapped
 	elseif(power.colorDisconnected and not UnitIsConnected(unit)) then
 		t = self.colors.disconnected
 	elseif(power.colorPower) then
-		local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
-
+		local ptype, ptoken = UnitPowerType(unit)
+		
 		t = self.colors.power[ptoken]
 		if(not t) then
 			if(power.GetAlternativeColor) then
-				r, g, b = power:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
-			elseif(altR) then
-				r, g, b = altR, altG, altB
+				r, g, b = power:GetAlternativeColor(unit, ptype, ptoken)
 			else
 				t = self.colors.power[ptype]
 			end
@@ -171,11 +154,11 @@ local Update = function(self, event, unit)
 		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
 	end
 
-	if(t) then
+	if (t) then
 		r, g, b = t[1], t[2], t[3]
 	end
 
-	if(b) then
+	if (b) then
 		power:SetStatusBarColor(r, g, b)
 
 		local bg = power.bg
@@ -198,6 +181,11 @@ local ForceUpdate = function(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
+local OnUpdate = function(...)
+  local self = ...
+  return Path(self, 'OnUpdate', self.unit)
+end
+
 local Enable = function(self, unit)
 	local power = self.Power
 	if(power) then
@@ -205,11 +193,19 @@ local Enable = function(self, unit)
 		power.ForceUpdate = ForceUpdate
 
 		if(power.frequentUpdates and (unit == 'player' or unit == 'pet')) then
-			self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
+			self:SetScript('OnUpdate', OnUpdate)
 		else
-			self:RegisterEvent('UNIT_POWER', Path)
+      self:RegisterEvent('UNIT_MANA', Path)
+      self:RegisterEvent('UNIT_RAGE', Path)
+      self:RegisterEvent('UNIT_FOCUS', Path)
+      self:RegisterEvent('UNIT_ENERGY', Path)
 		end
 
+    self:RegisterEvent('UNIT_MAXMANA', Path)
+    self:RegisterEvent('UNIT_MAXRAGE', Path)
+    self:RegisterEvent('UNIT_MAXFOCUS', Path)
+    self:RegisterEvent('UNIT_MAXENERGY', Path)
+    self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
 		self:RegisterEvent('UNIT_POWER_BAR_SHOW', Path)
 		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Path)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)

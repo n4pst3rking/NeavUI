@@ -1,5 +1,3 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
 if (cfg.MainMenuBar.hideGryphons) then
@@ -8,4 +6,3 @@ if (cfg.MainMenuBar.hideGryphons) then
 end
 
 MainMenuBar:SetScale(cfg.MainMenuBar.scale)
-OverrideActionBar:SetScale(cfg.vehicleBar.scale)

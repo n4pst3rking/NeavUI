@@ -1,5 +1,4 @@
-
-local _, ns = ...
+local ns = oUFNeav
 local config = ns.Config
 
 local floor = floor
@@ -73,12 +72,8 @@ local function GetUnitStatus(unit)
     end
 end
 
-local function GetFormattedText(text, cur, max, alt)
+local function GetFormattedText(text, cur, max)
     local perc = (cur/max)*100
-
-    if (alt) then
-        text = gsub(text, '$alt', ((alt > 0) and format('%s', FormatValue(alt)) or ''))
-    end
 
     local r, g, b = oUF.ColorGradient(cur, max, unpack(oUF.smoothGradient or oUF.colors.smooth))
     text = gsub(text, '$cur', format('%s', (cur > 0 and FormatValue(cur)) or ''))
@@ -122,11 +117,10 @@ ns.GetPowerText = function(unit, cur, max)
     local uconf = config.units[ns.cUnit(unit)]
 
     if (not cur) then
-        max = UnitPower(unit)
-        cur = UnitPowerMax(unit)
+        max = UnitMana(unit)
+        cur = UnitManaMax(unit)
     end
 
-    local alt = UnitPower(unit, ALTERNATE_POWER_INDEX)
     local powerType = UnitPowerType(unit)
 
     local powerString
@@ -134,12 +128,12 @@ ns.GetPowerText = function(unit, cur, max)
         powerString = ''
     elseif (max == 0) then
         powerString = ''
-    elseif (not UnitHasMana(unit) or powerType ~= 0 or UnitHasVehicleUI(unit) and uconf and uconf.powerTagNoMana) then
-        powerString = GetFormattedText(uconf.powerTagNoMana, cur, max, alt)
+    elseif (not UnitHasMana(unit) and uconf and uconf.powerTagNoMana) then
+        powerString = GetFormattedText(uconf.powerTagNoMana, cur, max)
     elseif ((cur == max) and uconf and uconf.powerTagFull)then
-        powerString = GetFormattedText(uconf.powerTagFull, cur, max, alt)
+        powerString = GetFormattedText(uconf.powerTagFull, cur, max)
     elseif (uconf and uconf.powerTag) then
-        powerString = GetFormattedText(uconf.powerTag, cur, max, alt)
+        powerString = GetFormattedText(uconf.powerTag, cur, max)
         
     else
         if (cur == max) then

@@ -1,8 +1,9 @@
+DEBUFF_ACTUAL_DISPLAY = 0
 
-local _, nBuff = ...
+nBuff = {}
 
 nBuff.Config = {
-    buffSize = 36,
+    buffSize = 28,
     buffScale = 1,
     buffBorderColor = {1, 1, 1}, 
 
@@ -12,7 +13,7 @@ nBuff.Config = {
     borderBuff = 'Interface\\AddOns\\nBuff\\media\\textureOverlay',
     borderDebuff = 'Interface\\AddOns\\nBuff\\media\\textureDebuff',
 
-    debuffSize = 36,
+    debuffSize = 28,
     debuffScale = 1,
 
     debuffFontSize = 14,

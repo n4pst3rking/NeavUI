@@ -143,14 +143,15 @@ end
 
 local OnSpellsChanged
 do
-    local IsSpellKnown = IsSpellKnown
+    local IsUsableSpell = IsUsableSpell
     local GetSpellInfo = GetSpellInfo
 
 	-- @return Highest priority spell name available, or nil if none
     local function GetSpellName(IDs)
         if (IDs) then
             for _, ID in ipairs(IDs) do
-                if (IsSpellKnown(ID)) then
+                local usable, nomana = IsUsableSpell(ID)
+                if (usable or nomana == true) then
                     return GetSpellInfo(ID)
                 end
             end

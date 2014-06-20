@@ -1,6 +1,13 @@
-local addonName, addon = ...
+evl_RS = {}
+local addon = evl_RS
 local frame = CreateFrame("Button", nil, UIParent)
 local watches = {}
+
+local insert = table.insert
+local sort = table.sort
+local GetNumRaidMembers = GetNumRaidMembers
+local UnitExists = UnitExists
+local GameTooltip = GameTooltip
 
 local text = frame:CreateFontString(nil, "ARTWORK")
 text:SetFontObject(GameFontHighlightSmall)
@@ -19,11 +26,11 @@ local onUpdate = function(self, elapsed)
 		lastUpdate = 0
 		result = nil
 		
-		if GetNumGroupMembers() > 0 then
+		if GetNumRaidMembers() > 0 then
 			for name, callback in pairs(watches) do
 				local count = 0
 	
-				for i = 1, GetNumGroupMembers() do
+				for i = 1, GetNumRaidMembers() do
 					local unit = "raid" .. i
 
 					if UnitExists(unit) and callback(unit) then
@@ -55,14 +62,14 @@ local onEnter = function()
 	for name, callback in pairs(watches) do
 		matches = {}
 		
-		for i = 1, GetNumGroupMembers() do
-			unit = "raid" .. i
+		for i = 1, GetNumRaidMembers() do
+			local unit = 'raid'..i
 
 			if UnitExists(unit) and callback(unit) then
 				_, classId = UnitClass(unit)
 				
 				-- TODO: Make sure classId is available at this time
-				table.insert(matches, {name = UnitName(unit), color = RAID_CLASS_COLORS[classId]})
+				insert(matches, {name = UnitName(unit), color = RAID_CLASS_COLORS[classId]})
 			end
 		end
 		
@@ -73,7 +80,7 @@ local onEnter = function()
 
 			GameTooltip:AddLine(name .. ":", 1, 1, 1)
 			
-			table.sort(matches, memberSortCompare)
+			sort(matches, memberSortCompare)
 			
 			for _, match in pairs(matches) do
 				GameTooltip:AddLine(match.name, match.color.r, match.color.g, match.color.b)

@@ -1,4 +1,4 @@
-local _, ns = ...
+local ns = oUFNeav
 local oUF = ns.oUF or oUF
 assert(oUF, "<name> was unable to locate oUF install.")
 

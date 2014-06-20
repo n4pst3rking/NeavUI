@@ -16,13 +16,14 @@ local slotInfo = {
     [8] = {8, 'Feet'},
     [9] = {16, 'MainHand'},
     [10] = {17, 'SecondaryHand'},
+    [11] = {18, 'Ranged'}
 }
 
 local charString = CharacterLevelText 
 charString:SetFont('Fonts\\ARIALN.ttf', 14)
 
-local f = CreateFrame('Button', 'PaperDollFrameDurabilityTab', PaperDollSidebarTab1, 'CharacterFrameTabButtonTemplate')
-f:SetPoint('TOP', PaperDollFrame, 'BOTTOM', 170, 2)
+local f = CreateFrame('Button', 'PaperDollFrameDurabilityTab', PaperDollFrame, 'CharacterFrameTabButtonTemplate')
+f:SetPoint('TOPLEFT', CharacterFrameTab1, 'BOTTOMLEFT', 12, 12)
 f:Disable()
 f:EnableMouse(false)
 f:SetFrameStrata('BACKGROUND')
@@ -92,6 +93,6 @@ f:SetScript('OnEvent', function(event)
             r, g, b = 0, 1, 0
         end
 
-        f:SetText(format('|cff%02x%02x%02x%d%%|r', r*255, g*255, b*255, (overAll/total)*100)..' '..DURABILITY)
+        f:SetText(format('|cff%02x%02x%02x%d%%|r', r*255, g*255, b*255, (overAll/total)*100))
     end
 end)

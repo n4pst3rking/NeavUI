@@ -1,4 +1,4 @@
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 local Private = oUF.Private
 
@@ -14,9 +14,6 @@ function oUF:HandleUnit(object, unit)
 		object:RegisterEvent('UPDATE_MOUSEOVER_UNIT', object.UpdateAllElements)
 	elseif(unit == 'focus') then
 		object:RegisterEvent('PLAYER_FOCUS_CHANGED', object.UpdateAllElements)
-	elseif(unit:match'(boss)%d?$' == 'boss') then
-		object:RegisterEvent('INSTANCE_ENCOUNTER_ENGAGE_UNIT', object.UpdateAllElements, true)
-		object:RegisterEvent('UNIT_TARGETABLE_CHANGED', object.UpdateAllElements)
 	elseif(unit:match'%w+target') then
 		enableTargetUpdate(object)
 	end

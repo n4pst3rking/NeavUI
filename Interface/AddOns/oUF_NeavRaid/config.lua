@@ -1,6 +1,6 @@
+oUFNeavRaid = {}
 
-local _, ns = ...
-
+local ns = oUFNeavRaid
 ns.Config = {
     media = {
         statusbar = 'Interface\\AddOns\\oUF_NeavRaid\\media\\statusbarTexture',                 -- Health- and Powerbar texture
@@ -23,7 +23,7 @@ ns.Config = {
 
             width = 42,
             height = 40,
-            scale = 1.1, 
+            scale = 1.1,
 
             layout = {
                 frameSpacing = 7,

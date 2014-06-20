@@ -37,7 +37,7 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local Update = function(self, event, unit)
@@ -48,19 +48,18 @@ local Update = function(self, event, unit)
 
 	if(portrait:IsObjectType'Model') then
 		local guid = UnitGUID(unit)
+    portrait:ClearModel()
 		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
-			portrait:SetCamDistanceScale(0.25)
-			portrait:SetPortraitZoom(0)
-			portrait:SetPosition(0,0,0.5)
-			portrait:ClearModel()
-			portrait:SetModel('interface\\buttons\\talktomequestionmark.m2')
+      portrait:SetModelScale(4.25)
+      portrait:SetPosition(0,0,-1.5)
+      portrait:SetModel("Interface\\Buttons\\talktomequestionmark.mdx")
+--      portrait:SetModel('interface\\buttons\\talktomequestionmark.m2')
 			portrait.guid = nil
 		elseif(portrait.guid ~= guid or event == 'UNIT_MODEL_CHANGED') then
-			portrait:SetCamDistanceScale(1)
-			portrait:SetPortraitZoom(1)
-			portrait:SetPosition(0,0,0)
-			portrait:ClearModel()
-			portrait:SetUnit(unit)
+      portrait:SetUnit(unit)
+      portrait:SetCamera(1)
+      portrait.SetCamera(portrait, 0)
+      portrait:Show()
 			portrait.guid = guid
 		end
 	else

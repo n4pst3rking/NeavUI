@@ -1,9 +1,7 @@
-
-local _, nPower = ...
+nPower = {}
 
 local format = string.format
 local floor = math.floor
-
 function nPower:FormatValue(self)
     if (self >= 10000) then
         return ('%.1fk'):format(self / 1e3)
@@ -20,6 +18,6 @@ end
 function nPower:Fade(frame, timeToFade, startAlpha, endAlpha)
 	if (self:Round(frame:GetAlpha(), 1) ~= endAlpha) then
 		local mode = startAlpha > endAlpha and 'In' or 'Out'
-        securecall('UIFrameFade'..mode, frame, timeToFade, startAlpha, endAlpha)
+    securecall('UIFrameFade'..mode, frame, timeToFade, startAlpha, endAlpha)
 	end
 end

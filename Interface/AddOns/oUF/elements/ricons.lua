@@ -30,7 +30,7 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local GetRaidTargetIndex = GetRaidTargetIndex

@@ -1,4 +1,4 @@
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 local Private = oUF.Private
 
@@ -8,7 +8,8 @@ local frame_metatable = Private.frame_metatable
 
 -- Original event methods
 local RegisterEvent = frame_metatable.__index.RegisterEvent
-local RegisterUnitEvent = frame_metatable.__index.RegisterUnitEvent
+--local RegisterUnitEvent = frame_metatable.__index.RegisterUnitEvent
+local RegisterUnitEvent = function(frame, event, ...) RegisterEvent(frame, event) end
 local UnregisterEvent = frame_metatable.__index.UnregisterEvent
 local IsEventRegistered = frame_metatable.__index.IsEventRegistered
 
@@ -53,7 +54,6 @@ local event_metatable = {
 function frame_metatable.__index:RegisterEvent(event, func, unitless)
 	-- Block OnUpdate polled frames from registering events.
 	if(self.__eventless) then return end
-
 	argcheck(event, 2, 'string')
 
 	if(type(func) == 'string' and type(self[func]) == 'function') then
@@ -89,7 +89,7 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 		if not self:GetScript('OnEvent') then
 			self:SetScript('OnEvent', OnEvent)
 		end
-
+		
 		if unitless then
 			RegisterEvent(self, event)
 		else

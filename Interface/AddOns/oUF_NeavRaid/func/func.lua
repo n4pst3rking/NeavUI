@@ -1,5 +1,5 @@
 
-local _, ns = ...
+local ns = oUFNeavRaid
 
 local GetTime = GetTime
 local floor, fmod = floor, math.fmod
@@ -19,8 +19,8 @@ end
 
 ns.MultiCheck = function(what, ...)
     for i = 1, select('#', ...) do
-        if (what == select(i, ...)) then 
-            return true 
+        if (what == select(i, ...)) then
+            return true
         end
     end
 

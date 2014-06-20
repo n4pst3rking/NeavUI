@@ -1,5 +1,4 @@
-
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNeav
 local oUF = ns.oUF or _G.oUF
 
 local Update = function(self, event, unit)
@@ -11,11 +10,10 @@ local Update = function(self, event, unit)
     local unit = unit or self.unit
 
     local status
-    -- if (UnitCanAttack(unit, 'player')) then
     if (UnitCanAttack('player', 'target')) then
-        status = UnitThreatSituation('player', 'target')
+--        status = UnitThreatSituation('player', 'target')
     else
-        status = UnitThreatSituation(unit)
+--        status = UnitThreatSituation(unit)
     end
 
     if (status and status > 0) then

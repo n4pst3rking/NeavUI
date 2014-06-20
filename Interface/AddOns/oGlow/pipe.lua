@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 local pipesTable = {}

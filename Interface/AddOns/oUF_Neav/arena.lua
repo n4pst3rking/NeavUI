@@ -1,12 +1,11 @@
-
-local _, ns = ...
+local ns = oUFNeav
 local config = ns.Config
 
 if (not config.units.arena.show) then
     return
 end
 
-SetCVar('showArenaEnemyFrames', 0)
+--SetCVar('showArenaEnemyFrames', 0)
 
 local function ColorNameBackground(self, unit)
     local _, class = UnitClass(unit)
@@ -62,14 +61,14 @@ local function CreateArenaLayout(self, unit)
 
     self.Texture = self.Health:CreateTexture(nil, 'ARTWORK')
     self.Texture:SetTexture('Interface\\AddOns\\oUF_Neav\\media\\arenaFrameTexture')
-    self.Texture:SetSize(250, 129)
+    SetSize(self.Texture, 250, 129)
     self.Texture:SetPoint('CENTER', self, 31, -24)
 
         -- healthbar
 
     self.Health = CreateFrame('StatusBar', nil, self)
     self.Health:SetStatusBarTexture(config.media.statusbar, 'BORDER')
-    self.Health:SetSize(115, 8)
+    SetSize(self.Health, 115, 8)
     self.Health:SetPoint('TOPRIGHT', self.Texture, -105, -43)
 
     self.Health:SetBackdrop({bgFile = 'Interface\\Buttons\\WHITE8x8'})
@@ -105,7 +104,7 @@ local function CreateArenaLayout(self, unit)
     self.Name:SetFont(config.font.normalBig, config.font.normalBigSize)
     self.Name:SetShadowOffset(1, -1)
     self.Name:SetJustifyH('CENTER')
-    self.Name:SetSize(110, 10)
+    SetSize(self.Name, 110, 10)
     self.Name:SetPoint('BOTTOM', self.Health, 'TOP', 0, 6)
 
     self:Tag(self.Name, '[name]')
@@ -141,7 +140,7 @@ local function CreateArenaLayout(self, unit)
         self.RaidIcon = self.Health:CreateTexture(nil, 'OVERLAY', self)
         self.RaidIcon:SetPoint('CENTER', self, 'TOPRIGHT', -9, -5)
         self.RaidIcon:SetTexture('Interface\\TargetingFrame\\UI-RaidTargetingIcons')
-        self.RaidIcon:SetSize(26, 26)
+        SetSize(self.RaidIcon, 26, 26)
 
         self.Buffs = CreateFrame('Frame', nil, self)
         self.Buffs.size = 28
@@ -195,7 +194,7 @@ local function CreateArenaLayout(self, unit)
         self.Castbar:SetBeautyBorderPadding(3)
 
         self.Castbar.Icon = self.Castbar:CreateTexture(nil, 'BACKGROUND')
-        self.Castbar.Icon:SetSize(config.units.arena.castbar.icon.size, config.units.arena.castbar.icon.size)
+        SetSize(self.Castbar.Icon, config.units.arena.castbar.icon.size, config.units.arena.castbar.icon.size)
         self.Castbar.Icon:SetPoint('TOPRIGHT', self.Castbar, 'TOPLEFT', -10, 0.45)
         self.Castbar.Icon:SetTexture(1, 1, 1)
 
@@ -219,7 +218,7 @@ local function CreateArenaLayout(self, unit)
             -- oUF_Trinket support
 
         self.Trinket = CreateFrame('Frame', nil, self)
-        self.Trinket:SetSize(30, 30)
+        SetSize(self.Trinket, 30, 30)
         self.Trinket:SetPoint('RIGHT', self, 'LEFT', -10, 1)
         self.Trinket.trinketUseAnnounce = true
         self.Trinket.trinketUpAnnounce = true
@@ -232,25 +231,25 @@ local function CreateArenaLayout(self, unit)
         self.Talents:SetPoint('BOTTOM', self.Health, 'TOP', 0, 12)
         --]]
 
-        self:SetSize(132, 46)
+        SetSize(self, 132, 46)
     end
 
     if (self.targetUnit) then
-        self:SetSize(110, 20)
+        SetSize(self, 110, 20)
 
         self.Portrait = self:CreateTexture(nil, 'BACKGROUND')
-        self.Portrait:SetSize(37, 37)
+        SetSize(self.Portrait, 37, 37)
         self.Portrait:SetPoint('TOPLEFT', self.Texture, 7, -6)
 
         self.Texture:SetTexture('Interface\\AddOns\\oUF_Neav\\media\\customTargetTargetTexture')
         self.Texture:SetPoint('CENTER', self, 0, -2)
-        self.Texture:SetSize(128, 64)
+        SetSize(self.Texture, 128, 64)
 
         self.Name:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 2, -4)
         self.Name:SetJustifyH('LEFT')
-        self.Name:SetSize(75, 10)
+        SetSize(self.Name, 75, 10)
 
-        self.Health:SetSize(50, 5)
+        SetSize(self.Health, 50, 5)
         self.Health:ClearAllPoints()
         self.Health:SetPoint('CENTER', self.Texture, 5, 8)
     end

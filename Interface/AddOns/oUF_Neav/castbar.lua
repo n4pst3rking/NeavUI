@@ -1,6 +1,4 @@
-
-local _, ns = ...
-
+local ns = oUFNeav
 local function UpdateCastbarColor(self, unit, config)
     if (self.interrupt) then
         ns.ColorBorder(self, 'white', unpack(config and config.interruptColor or {1, 0, 1}))
@@ -26,7 +24,7 @@ function ns.CreateCastbars(self, unit)
         self.Castbar = CreateFrame('StatusBar', self:GetName()..'Castbar', self)
         self.Castbar:SetStatusBarTexture(ns.Config.media.statusbar)
         self.Castbar:SetScale(config.scale)
-        self.Castbar:SetSize(config.width, config.height)
+        SetSize(self.Castbar, config.width, config.height)
         self.Castbar:SetStatusBarColor(unpack(config.color))  
         
         if (unit == 'focus') then
@@ -68,7 +66,7 @@ function ns.CreateCastbars(self, unit)
 
         if (config.icon.show) then
             self.Castbar.Icon = self.Castbar:CreateTexture(nil, 'ARTWORK')
-            self.Castbar.Icon:SetSize(config.height + 2, config.height + 2)
+            SetSize(self.Castbar.Icon, config.height + 2, config.height + 2)
             self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
             if (config.icon.position == 'LEFT') then
@@ -96,12 +94,11 @@ function ns.CreateCastbars(self, unit)
         self.Castbar.PostCastStart = function(self, unit)
             if (unit == 'player') then
                 if (self.Latency) then
-                    local down, up, lagHome, lagWorld = GetNetStats()
-                    local avgLag = (lagHome + lagWorld) / 2
+                    local _, _, lag = GetNetStats()
 
                     self.Latency:ClearAllPoints()
                     self.Latency:SetPoint('RIGHT', self, 'BOTTOMRIGHT', -1, -2) 
-                    self.Latency:SetText(string.format('%.0f', avgLag)..'ms')
+                    self.Latency:SetText(string.format('%.0f', lag)..'ms')
                 end
             end
 
@@ -127,12 +124,11 @@ function ns.CreateCastbars(self, unit)
         self.Castbar.PostChannelStart = function(self, unit)
             if (unit == 'player') then
                 if (self.Latency) then
-                    local down, up, lagHome, lagWorld = GetNetStats()
-                    local avgLag = (lagHome + lagWorld) / 2
+                    local _, _, lag = GetNetStats()
 
                     self.Latency:ClearAllPoints()
                     self.Latency:SetPoint('LEFT', self, 'BOTTOMLEFT', 1, -2)
-                    self.Latency:SetText(string.format('%.0f', avgLag)..'ms')
+                    self.Latency:SetText(string.format('%.0f', lag)..'ms')
                 end
             end
 
@@ -161,7 +157,7 @@ for i = 1, MIRRORTIMER_NUMTIMERS do
     local bar = _G['MirrorTimer'..i]
     bar:SetParent(UIParent)
     bar:SetScale(1.132)
-    bar:SetSize(220, 18)
+    SetSize(bar, 220, 18)
     
     bar:CreateBeautyBorder(11)
     bar:SetBeautyBorderPadding(3)
@@ -198,7 +194,7 @@ f:SetScript('OnEvent', function(self, event)
         if (not b['bar'].beautyBorder) then
             local bar = b['bar']
             bar:SetScale(1.132)
-            bar:SetSize(220, 18)
+            SetSize(bar, 220, 18)
 
             for i = 1, select('#', bar:GetRegions()) do
                 local region = select(i, bar:GetRegions())

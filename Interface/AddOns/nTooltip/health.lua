@@ -1,5 +1,3 @@
-
-local _, nTooltip = ...
 local cfg = nTooltip.Config
 
 if (not cfg.healthbar.showHealthValue) then
@@ -79,34 +77,34 @@ local function GetHealthTag(text, cur, max)
     return text
 end
 
-GameTooltipStatusBar:HookScript('OnValueChanged', function(self, value)
-    if (self.Text) then
-        self.Text:SetText('')
-    end
+subscribe(GameTooltipStatusBar, 'OnValueChanged', function(self, value)
+  if (self.Text) then
+    self.Text:SetText('')
+  end
 
-    if (not value) then
-        return
-    end
+  if (not value) then
+    return
+  end
 
-    local min, max = self:GetMinMaxValues()
+  local min, max = self:GetMinMaxValues()
 
-    if ((value < min) or (value > max) or (value == 0) or (value == 1)) then
-        return
-    end
+  if ((value < min) or (value > max) or (value == 0) or (value == 1)) then
+    return
+  end
 
-    if (not self.Text) then
-        CreateHealthString(self)
-    end
+  if (not self.Text) then
+    CreateHealthString(self)
+  end
 
-    local fullString = GetHealthTag(cfg.healthbar.healthFullFormat, value, max)
-    local normalString = GetHealthTag(cfg.healthbar.healthFormat, value, max)
+  local fullString = GetHealthTag(cfg.healthbar.healthFullFormat, value, max)
+  local normalString = GetHealthTag(cfg.healthbar.healthFormat, value, max)
 
-    local perc = (value/max)*100 
-    if (perc >= 100 and currentValue ~= 1) then
-        self.Text:SetText(fullString)
-    elseif (perc < 100 and currentValue ~= 1) then
-        self.Text:SetText(normalString)
-    else
-        self.Text:SetText('')
-    end
+  local perc = (value/max)*100 
+  if (perc >= 100 and currentValue ~= 1) then
+    self.Text:SetText(fullString)
+  elseif (perc < 100 and currentValue ~= 1) then
+    self.Text:SetText(normalString)
+  else
+    self.Text:SetText('')
+  end
 end)

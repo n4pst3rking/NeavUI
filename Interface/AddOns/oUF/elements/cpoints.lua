@@ -33,7 +33,7 @@
                   to its internal function again.
 ]]
 
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local GetComboPoints = GetComboPoints
@@ -47,12 +47,7 @@ local Update = function(self, event, unit)
 		cpoints:PreUpdate()
 	end
 
-	local cp
-	if(UnitHasVehicleUI'player') then
-		cp = GetComboPoints('vehicle', 'target')
-	else
-		cp = GetComboPoints('player', 'target')
-	end
+	local cp = GetComboPoints()
 
 	for i=1, MAX_COMBO_POINTS do
 		if(i <= cp) then
@@ -81,7 +76,7 @@ local Enable = function(self)
 		cpoints.__owner = self
 		cpoints.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_COMBO_POINTS', Path, true)
+		self:RegisterEvent('PLAYER_COMBO_POINTS', Path, true)
 		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 
 		for index = 1, MAX_COMBO_POINTS do
@@ -102,7 +97,7 @@ local Disable = function(self)
 		for index = 1, MAX_COMBO_POINTS do
 			cpoints[index]:Hide()
 		end
-		self:UnregisterEvent('UNIT_COMBO_POINTS', Path)
+		self:UnregisterEvent('PLAYER_COMBO_POINTS', Path)
 		self:UnregisterEvent('PLAYER_TARGET_CHANGED', Path)
 	end
 end

@@ -1,11 +1,8 @@
+-- just a new color
+--local NEW_ITEM_VENDOR_STACK_BUY = ITEM_VENDOR_STACK_BUY
+--ITEM_VENDOR_STACK_BUY = '|cffa9ff00'..NEW_ITEM_VENDOR_STACK_BUY..'|r'
 
-    -- just a new color
-
-local NEW_ITEM_VENDOR_STACK_BUY = ITEM_VENDOR_STACK_BUY
-ITEM_VENDOR_STACK_BUY = '|cffa9ff00'..NEW_ITEM_VENDOR_STACK_BUY..'|r'
-
-    -- alt-click to buy a stack
-
+-- alt-click to buy a stack
 local origMerchantItemButton_OnModifiedClick = _G.MerchantItemButton_OnModifiedClick
 local function MerchantItemButton_OnModifiedClickHook(self, ...)
     origMerchantItemButton_OnModifiedClick(self, ...)

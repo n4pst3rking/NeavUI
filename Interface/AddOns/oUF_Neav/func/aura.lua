@@ -1,5 +1,4 @@
-
-local _, ns = ...
+local ns = oUFNeav 
 local config = ns.Config
 
 local GetTime = GetTime
@@ -47,60 +46,53 @@ end
 ns.PostUpdateIcon = function(icons, unit, icon, index, offset)
     icon:SetAlpha(1)
 
-    if (icon.isStealable) then
-        if (icon.Shadow) then
-            icon.Shadow:SetVertexColor(1, 1, 0, 1)
-        end
-    else
-        if (icon.Shadow) then
-            icon.Shadow:SetVertexColor(0, 0, 0, 1)
-        end
+    if (icon.Shadow) then
+      icon.Shadow:SetVertexColor(0, 0, 0, 1)
     end
 
     if (config.units.target.colorPlayerDebuffsOnly) then
-        if (unit == 'target') then 
-            if (icon.isDebuff) then
-                if (not IsMine(icon.owner)) then
-                    icon.overlay:SetVertexColor(0.45, 0.45, 0.45)
-                    icon.icon:SetDesaturated(true)
-                    -- icon:SetAlpha(0.55)
-                else
-                    icon.icon:SetDesaturated(false)
-                    icon:SetAlpha(1)
-                end
-            end
+      if (unit == 'target') then 
+        if (icon.isDebuff) then
+          icon.icon:SetDesaturated(false)
+          icon:SetAlpha(1)
         end
+      end
     end
 
     if (icon.remaining) then
-        if (unit == 'target' and icon.isDebuff and not IsMine(icon.owner) and (not UnitIsFriend('player', unit) and UnitCanAttack(unit, 'player') and not UnitPlayerControlled(unit)) and not config.units.target.showAllTimers ) then
+        if (unit == 'target' and icon.isDebuff and (not UnitIsFriend('player', unit) and UnitCanAttack(unit, 'player') and not UnitPlayerControlled(unit)) and not config.units.target.showAllTimers ) then
             if (icon.remaining:IsShown()) then
                 icon.remaining:Hide()
             end
 
             icon:SetScript('OnUpdate', nil)
         else
-            local _, _, _, _, _, duration, expirationTime = UnitAura(unit, index, icon.filter)
-            if (duration and duration > 0) then
-                if (not icon.remaining:IsShown()) then
-                    icon.remaining:Show()
-                end
-            else
-                if (icon.remaining:IsShown()) then
-                    icon.remaining:Hide()
-                end
-            end
+          local duration, expirationTime
+          if icon.isDebuff then
+            _, _, _, _, _, duration, expirationTime = UnitDebuff(unit, index, icon.filter)
+          else
+            _, _, _, _, duration, expirationTime = UnitBuff(unit, index, icon.filter)
+          end
+          if (duration and duration > 0) then
+              if (not icon.remaining:IsShown()) then
+                  icon.remaining:Show()
+              end
+          else
+              if (icon.remaining:IsShown()) then
+                  icon.remaining:Hide()
+              end
+          end
 
-            icon.duration = duration
-            icon.expires = expirationTime
-            icon:SetScript('OnUpdate', ns.UpdateAuraTimer)
+          icon.duration = duration
+          icon.expires = expirationTime
+          icon:SetScript('OnUpdate', ns.UpdateAuraTimer)
         end
     end
 end
 
 ns.UpdateAuraIcons = function(auras, button)
     if (not button.Shadow) then
-        local size = button:GetSize()
+        local size = GetSize(button)
 
         button:SetFrameLevel(1)
 
@@ -123,13 +115,11 @@ ns.UpdateAuraIcons = function(auras, button)
 
         if (config.show.disableCooldown) then
             button.cd:SetReverse()
-            button.cd:SetDrawEdge(true)
             button.cd:ClearAllPoints()
             button.cd:SetPoint('TOPRIGHT', button.icon, 'TOPRIGHT', -1, -1)
             button.cd:SetPoint('BOTTOMLEFT', button.icon, 'BOTTOMLEFT', 1, 1)
         else
             auras.disableCooldown = true
-            -- button.cd.noOCC = true
 
             button.remaining = button:CreateFontString(nil, 'OVERLAY')
             button.remaining:SetFont(config.font.normal, 8, 'THINOUTLINE')

@@ -1,6 +1,4 @@
-local name, ns = ...
 local oGlow = ns.oGlow
-
 local argcheck = oGlow.argcheck
 
 local eventFrame = CreateFrame'Frame'

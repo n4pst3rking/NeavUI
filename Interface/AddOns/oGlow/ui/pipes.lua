@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 local frame = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
@@ -19,7 +18,7 @@ local _BACKDROP = {
 
 local createCheckBox = function(parent)
 	local check = CreateFrame('CheckButton', nil, parent)
-	check:SetSize(16, 16)
+	SetSize(check, 16, 16)
 
 	check:SetNormalTexture[[Interface\Buttons\UI-CheckBox-Up]]
 	check:SetPushedTexture[[Interface\Buttons\UI-CheckBox-Down]]
@@ -141,7 +140,7 @@ do
 			self:SetBackdropBorderColor(.3, .3, .3)
 		end
 
-		GameTooltip_Hide()
+		GameTooltip:Hide()
 	end
 
 	local createRow = function(parent, i)

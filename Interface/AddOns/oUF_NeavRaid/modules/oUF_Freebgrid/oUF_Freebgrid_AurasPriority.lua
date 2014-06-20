@@ -1,5 +1,5 @@
 
-local _, ns = ...
+local ns = oUFNeavRaid
 
 ns.dispelPriority = {
     Magic = 5,

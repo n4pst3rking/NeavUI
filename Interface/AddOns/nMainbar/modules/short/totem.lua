@@ -1,5 +1,3 @@
-
-local _, nMainbar = ...
 local cfg = nMainbar.Config
 
 if (not cfg.MainMenuBar.shortBar and not cfg.MainMenuBar.moveableExtraBars) then

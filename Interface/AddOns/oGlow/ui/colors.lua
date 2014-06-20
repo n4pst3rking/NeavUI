@@ -1,4 +1,3 @@
-local _, ns = ...
 local oGlow = ns.oGlow
 
 local colorTable = ns.colorTable
@@ -86,6 +85,7 @@ function frame:CreateOptions()
 	end
 
 	local Label_Update = function(self)
+	  DEFAULT_CHAT_FRAME:AddMessage(self:GetName())
 		local row = self:GetParent()
 
 		local r = row.redLabel:GetNumber() / 255
@@ -120,7 +120,7 @@ function frame:CreateOptions()
 	end
 
 	local rows = {}
-	for i=0, 7 do
+	for i=0, 6 do
 		local row = CreateFrame('Button', nil, box)
 
 		row:SetBackdrop(backdrop)
@@ -182,7 +182,7 @@ function frame:CreateOptions()
 		row.nameLabel = nameLabel
 
 		local reset = CreateFrame("Button", nil, row)
-		reset:SetSize(16, 16)
+		SetSize(reset, 16, 16)
 		reset:SetPoint('LEFT', row, 'RIGHT')
 
 		reset:SetNormalTexture[[Interface\Buttons\UI-Panel-MinimizeButton-Up]]
@@ -191,7 +191,7 @@ function frame:CreateOptions()
 
 		reset:SetScript("OnClick", Reset_OnClick)
 		reset:SetScript("OnEnter", Reset_OnEnter)
-		reset:SetScript("OnLeave", GameTooltip_Hide)
+		reset:SetScript("OnLeave", function() GameTooltip:Hide() end)
 		row.reset = reset
 
 		row.id = i
@@ -201,7 +201,7 @@ function frame:CreateOptions()
 	box:SetHeight(8 * 24 + 16)
 
 	function frame:refresh()
-		for i=0, 7 do
+		for i=0, 6 do
 			local r, g, b = unpack(colorTable[i])
 			local row = rows[i]
 			row.nameLabel:SetText(_G['ITEM_QUALITY' .. i .. '_DESC'])

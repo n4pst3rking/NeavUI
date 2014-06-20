@@ -1,4 +1,4 @@
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local Private = ns.oUF.Private
 
 function Private.argcheck(value, num, ...)
@@ -14,7 +14,7 @@ function Private.argcheck(value, num, ...)
 end
 
 function Private.print(...)
-	print("|cff33ff99oUF:|r", ...)
+	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99oUF:|r"..(...))
 end
 
 function Private.error(...)

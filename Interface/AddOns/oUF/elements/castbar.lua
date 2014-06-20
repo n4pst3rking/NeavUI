@@ -76,7 +76,7 @@
  Hooks and Callbacks
 
 ]]
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local oUF = ns.oUF
 
 local UnitName = UnitName
@@ -87,7 +87,7 @@ local UnitChannelInfo = UnitChannelInfo
 local updateSafeZone = function(self)
 	local sz = self.SafeZone
 	local width = self:GetWidth()
-	local _, _, _, ms = GetNetStats()
+	local _, _, ms = GetNetStats()
 
 	-- Guard against GetNetStats returning latencies of 0.
 	if(ms ~= 0) then

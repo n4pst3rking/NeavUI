@@ -1,4 +1,4 @@
-local parent, ns = ...
+local parent, ns = debugstack():match[[\AddOns\(.-)\]], oUFNS
 local global = GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
@@ -212,27 +212,10 @@ local initObject = function(unit, style, styleFunc, header, ...)
 			objectUnit = objectUnit .. suffix
 		end
 
-		if(not (suffix == 'target' or objectUnit and objectUnit:match'target')) then
-			object:RegisterEvent('UNIT_ENTERED_VEHICLE', updateActiveUnit, true)
-			object:RegisterEvent('UNIT_EXITED_VEHICLE', updateActiveUnit, true)
-
-			-- We don't need to register UNIT_PET for the player unit. We register it
-			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE doesn't always
-			-- have pet information when they fire for party and raid units.
-			if(objectUnit ~= 'player') then
-				object:RegisterEvent('UNIT_PET', UpdatePet, true)
-			end
-		end
-
 		if(not header) then
 			-- No header means it's a frame created through :Spawn().
 			object:SetAttribute("*type1", "target")
 			object:SetAttribute('*type2', 'togglemenu')
-
-			-- No need to enable this for *target frames.
-			if(not (unit:match'target' or suffix == 'target')) then
-				object:SetAttribute('toggleForVehicle', true)
-			end
 
 			-- Other boss and target units are handled by :HandleUnit().
 			if(suffix == 'target') then
@@ -242,7 +225,7 @@ local initObject = function(unit, style, styleFunc, header, ...)
 			end
 		else
 			-- Used to update frames when they change position in a group.
-			object:RegisterEvent('GROUP_ROSTER_UPDATE', object.UpdateAllElements)
+			object:RegisterEvent('PARTY_MEMBERS_CHANGED', object.UpdateAllElements)
 
 			if(num > 1) then
 				if(object:GetParent() == header) then
@@ -347,7 +330,8 @@ do
 		raid10 = '[@raid6,exists] show;',
 		raid = '[group:raid] show;',
 		party = '[group:party,nogroup:raid] show;',
-		solo = '[@player,exists,nogroup:party] show;',
+		-- solo = '[@player,exists,nogroup:party] show;',
+		solo = '[target=player,exists,nogroup:party] show;'
 	}
 
 	function getCondition(...)
@@ -447,14 +431,7 @@ do
 				-- Attempt to guess what the header is set to spawn.
 				local groupFilter = header:GetAttribute'groupFilter'
 
-				if(type(groupFilter) == 'string' and groupFilter:match('MAIN[AT]')) then
-					local role = groupFilter:match('MAIN([AT])')
-					if(role == 'T') then
-						unit = 'maintank'
-					else
-						unit = 'mainassist'
-					end
-				elseif(header:GetAttribute'showRaid') then
+				if(header:GetAttribute'showRaid') then
 					unit = 'raid'
 				elseif(header:GetAttribute'showParty') then
 					unit = 'party'
@@ -474,7 +451,6 @@ do
 
 				frame:SetAttribute('*type1', 'target')
 				frame:SetAttribute('*type2', 'togglemenu')
-				frame:SetAttribute('toggleForVehicle', true)
 				frame:SetAttribute('oUF-guessUnit', unit)
 			end
 
@@ -527,10 +503,10 @@ do
 		if(visibility) then
 			local type, list = string.split(' ', visibility, 2)
 			if(list and type == 'custom') then
-				RegisterAttributeDriver(header, 'state-visibility', list)
+				RegisterStateDriver(header, 'state-visibility', list)
 			else
 				local condition = getCondition(string.split(',', visibility))
-				RegisterAttributeDriver(header, 'state-visibility', condition)
+				RegisterStateDriver(header, 'state-visibility', condition)
 			end
 		end
 
