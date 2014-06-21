@@ -1,8 +1,8 @@
 # Neav UI
 
-This fork try
+This fork is a backport of Neav UI and aims to provide the same experience on TBC 2.4.3
 Based on the development repository for Neav UI on WoWInterface.
-Check out [renstrom](https://github.com/renstrom/NeavUI) on github for the latest version
+Check out [renstrom](https://github.com/renstrom/NeavUI) on github for the original code
 
 ## Addons included
 
