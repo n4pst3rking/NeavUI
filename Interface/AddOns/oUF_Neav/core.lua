@@ -21,14 +21,20 @@ local tabCoordTable = {
     [3] = {0, 0.1875, 0, 1},
 }
 
-local CLASS_ICON_TCOORDS = {}
-
-if not IsAddOnLoaded('Blizzard_RaidUI') then
-    LoadAddOn('Blizzard_RaidUI')
-end
-for _, val in pairs(RAID_CLASS_BUTTONS) do
-    CLASS_ICON_TCOORDS[_] = val.coords;
-end
+local CLASS_ICON_TCOORDS = {
+    ["WARRIOR"]     = {0, 0.25, 0, 0.25},
+    ["MAGE"]        = {0.25, 0.49609375, 0, 0.25},
+    ["ROGUE"]       = {0.49609375, 0.7421875, 0, 0.25},
+    ["DRUID"]       = {0.7421875, 0.98828125, 0, 0.25},
+    ["HUNTER"]      = {0, 0.25, 0.25, 0.5},
+    ["SHAMAN"]      = {0.25, 0.49609375, 0.25, 0.5},
+    ["PRIEST"]      = {0.49609375, 0.7421875, 0.25, 0.5},
+    ["WARLOCK"]     = {0.7421875, 0.98828125, 0.25, 0.5},
+    ["PALADIN"]     = {0, 0.25, 0.5, 0.75},
+    ["PETS"]        = {0, 1, 0, 1},
+    ["MAINTANK"]    = {0, 1, 0, 1},
+    ["MAINASSIST"]  = {0, 1, 0, 1}
+}
 
 local function CreateDropDown(self)
     local dropdown = _G[string.format('%sFrameDropDown', string.gsub(self.unit, '(.)', string.upper, 1))]
