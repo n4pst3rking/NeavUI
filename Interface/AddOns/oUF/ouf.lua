@@ -325,9 +325,9 @@ end
 local getCondition
 do
 	local conditions = {
-		raid40 = '[@raid26,exists] show;',
-		raid25 = '[@raid11,exists] show;',
-		raid10 = '[@raid6,exists] show;',
+		raid40 = '[target=raid26,exists] show;',
+		raid25 = '[target=raid11,exists] show;',
+		raid10 = '[target=raid6,exists] show;',
 		raid = '[group:raid] show;',
 		party = '[group:party,nogroup:raid] show;',
 		-- solo = '[@player,exists,nogroup:party] show;',
@@ -416,11 +416,13 @@ do
 	end
 
 	-- There has to be an easier way to do this.
-	local initialConfigFunction = [[
+	local initialConfigFunction = function(self)
 		local header = self:GetParent()
-		local frames = table.new()
+		local frames = {}
 		table.insert(frames, self)
-		self:GetChildList(frames)
+		for i = 1, select('#', self:GetChildren()) do
+			table.insert(frames, select(i, self:GetChildren()))
+		end
 		for i=1, #frames do
 			local frame = frames[i]
 			local unit
@@ -455,19 +457,21 @@ do
 			end
 
 			local body = header:GetAttribute'oUF-initialConfigFunction'
-			if(body) then
-				frame:Run(body, unit)
+			if (type(body) == 'function') then
+				body(frame, unit)
+				-- frame:Run(body, unit)
 			end
 		end
 
-		header:CallMethod('styleFunction', self:GetName())
+		-- header:CallMethod('styleFunction', self:GetName())
+		header.styleFunction(header, self:GetName())
 
-		local clique = header:GetFrameRef("clickcast_header")
-		if(clique) then
-			clique:SetAttribute("clickcast_button", self)
-			clique:RunAttribute("clickcast_register")
-		end
-	]]
+		-- local clique = header:GetFrameRef("clickcast_header")
+		-- if(clique) then
+		-- 	clique:SetAttribute("clickcast_button", self)
+		-- 	clique:RunAttribute("clickcast_register")
+		-- end
+	end
 
 	function oUF:SpawnHeader(overrideName, template, visibility, ...)
 		if(not style) then return error("Unable to create frame. No styles have been registered.") end
@@ -476,7 +480,7 @@ do
 
 		local isPetHeader = template:match'PetHeader'
 		local name = overrideName or generateName(nil, ...)
-		local header = CreateFrame('Frame', name, oUF_PetBattleFrameHider, template)
+		local header = CreateFrame('Frame', name, UIParent, template)
 
 		header:SetAttribute("template", "oUF_ClickCastUnitTemplate")
 		for i=1, select("#", ...), 2 do
@@ -489,12 +493,13 @@ do
 		header.styleFunction = styleProxy
 
 		-- We set it here so layouts can't directly override it.
-		header:SetAttribute('initialConfigFunction', initialConfigFunction)
+		-- header:SetAttribute('initialConfigFunction', initialConfigFunction)
+		header.initialConfigFunction = initialConfigFunction
 		header:SetAttribute('oUF-headerType', isPetHeader and 'pet' or 'group')
 
-		if(Clique) then
-			SecureHandlerSetFrameRef(header, 'clickcast_header', Clique.header)
-		end
+		-- if(Clique) then
+		-- 	SecureHandlerSetFrameRef(header, 'clickcast_header', Clique.header)
+		-- end
 
 		if(header:GetAttribute'showParty') then
 			self:DisableBlizzard'party'
@@ -503,13 +508,14 @@ do
 		if(visibility) then
 			local type, list = string.split(' ', visibility, 2)
 			if(list and type == 'custom') then
-				RegisterStateDriver(header, 'state-visibility', list)
+				-- RegisterStateDriver(header, 'state-visibility', list)
+				RegisterStateDriver(header, 'visibility', list)
 			else
 				local condition = getCondition(string.split(',', visibility))
-				RegisterStateDriver(header, 'state-visibility', condition)
+				-- RegisterStateDriver(header, 'state-visibility', condition)
+				RegisterStateDriver(header, 'visibility', condition)
 			end
 		end
-
 		return header
 	end
 end
@@ -521,7 +527,7 @@ function oUF:Spawn(unit, overrideName)
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame("Button", name, oUF_PetBattleFrameHider, "SecureUnitButtonTemplate")
+	local object = CreateFrame("Button", name, UIParent, "SecureUnitButtonTemplate")
 	Private.UpdateUnits(object, unit)
 
 	self:DisableBlizzard(unit)

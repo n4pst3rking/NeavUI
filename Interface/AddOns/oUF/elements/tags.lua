@@ -378,7 +378,7 @@ local tagEvents = {
 	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
-	["group"]               = "GROUP_ROSTER_UPDATE",
+	["group"]               = "RAID_ROSTER_UPDATE",
 	["curpp"]               = 'UNIT_POWER',
 	["maxpp"]               = 'UNIT_MAXPOWER',
 	["missingpp"]           = 'UNIT_MAXPOWER UNIT_POWER',
@@ -401,7 +401,7 @@ local unitlessEvents = {
 
 	PARTY_LEADER_CHANGED = true,
 
-	GROUP_ROSTER_UPDATE = true,
+	RAID_ROSTER_UPDATE = true,
 
 	PLAYER_COMBO_POINTS = true
 }

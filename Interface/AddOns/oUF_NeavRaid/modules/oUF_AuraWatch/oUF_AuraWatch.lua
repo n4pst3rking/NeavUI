@@ -223,7 +223,11 @@ local function Update(frame, event, unit)
     end
 
     while true do
-        name, _, texture, count, _, duration, remaining, caster, _, _, spellid = UnitAura(unit, index, filter)
+        if (filter == 'HELPFUL') then
+          name, _, texture, count, duration, remaining = UnitBuff(unit, index)
+        else
+          name, _, texture, count, _, duration, remaining = UnitDebuff(unit, index)
+        end
         if (not name) then
             if (filter == 'HELPFUL') then
                 filter = 'HARMFUL'
@@ -247,18 +251,6 @@ local function Update(frame, event, unit)
             end
 
             index = index + 1
-        end
-
-        if (caster == 'player') then
-            if (spellid == 33763) then
-                if (count == 1) then
-                    icon.icon:SetVertexColor(0.1, 1, 0.1)
-                elseif (count == 2) then
-                    icon.icon:SetVertexColor(1, 1, 0)
-                elseif (count >= 3) then
-                    icon.icon:SetVertexColor(1, 0, 0)
-                end
-            end
         end
     end
 

@@ -16,10 +16,10 @@ ns.Config = {
 
     units = {
         ['raid'] = {
-            showSolo = true,
+            -- showSolo = true,
             showParty = true,
 
-            nameLength = 4,
+            nameLength = 6,
 
             width = 42,
             height = 40,

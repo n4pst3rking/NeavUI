@@ -72,7 +72,7 @@ local Enable = function(self)
 		raidrole.__owner = self
 		raidrole.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
+		self:RegisterEvent('RAID_ROSTER_UPDATE', Path, true)
 
 		return true
 	end
@@ -82,7 +82,7 @@ local Disable = function(self)
 	local raidrole = self.RaidRole
 
 	if(raidrole) then
-		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
+		self:UnregisterEvent('RAID_ROSTER_UPDATE', Path)
 	end
 end
 

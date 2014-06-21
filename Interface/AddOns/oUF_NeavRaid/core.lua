@@ -26,8 +26,8 @@ do
             {139, 'BOTTOMLEFT', {0, 1, 0}}, -- Renew
         },
         SHAMAN = {
-            {61295, 'TOPLEFT', {0.7, 0.3, 0.7}}, -- Riptide
-            {51945, 'TOPRIGHT', {0.2, 0.7, 0.2}}, -- Earthliving
+            -- {61295, 'TOPLEFT', {0.7, 0.3, 0.7}}, -- Riptide
+            -- {51945, 'TOPRIGHT', {0.2, 0.7, 0.2}}, -- Earthliving
             {974, 'BOTTOMRIGHT', {0.7, 0.4, 0}, false, true}, -- Earth Shield
         },
         WARLOCK = {
@@ -39,73 +39,6 @@ do
         },
     }
 end
-
---[[
-
-    -- W    I   P
-
-local inlist
-do
-    inlist = {
-        DRUID = {
-            [1] = {
-                spellid = 774,  -- Rejuvenation
-                pos = 'BOTTOMRIGHT',
-                color = {1, 0.2, 1}, -- custom color, set to nil if the spellicon should be shown
-                anyCaster = false,
-                hideCD = false,
-                hideCount = false,
-                priority = 'HIGH', -- to overlap other icons on this position
-            },
-
-            [2] = {
-                spellid = 33763,  -- Lifebloom
-                pos = 'BOTTOM',
-                color = {0.5, 1, 0.5},
-                anyCaster = false,
-                hideCD = false,
-                hideCount = true,
-            },
-
-            [3] = {
-                spellid = 48438,  -- Wild Growth
-                pos = 'BOTTOMLEFT',
-                color = {0.7, 1, 0},
-                anyCaster = false,
-                hideCD = false,
-                hideCount = true,
-            },
-        }
-    }
-
-        MAGE = {
-            {54648, 'BOTTOMRIGHT', {0.7, 0, 1}, true, true}, -- Focus Magic
-        },
-        PALADIN = {
-            {53563, 'BOTTOMRIGHT', {0, 1, 0}}, -- Beacon of Light
-        },
-        PRIEST = {
-            {6788, 'BOTTOMRIGHT', {0.6, 0, 0}, true}, -- Weakened Soul
-            {17, 'BOTTOMRIGHT', {1, 1, 0}, true}, -- Power Word: Shield
-            {33076, 'TOPRIGHT', {1, 0.6, 0.6}, true, true}, -- Prayer of Mending
-            {139, 'BOTTOMLEFT', {0, 1, 0}}, -- Renew
-        },
-        SHAMAN = {
-            {61295, 'TOPLEFT', {0.7, 0.3, 0.7}}, -- Riptide
-            {51945, 'TOPRIGHT', {0.2, 0.7, 0.2}}, -- Earthliving
-            {16177, 'BOTTOMLEFT', {0.4, 0.7, 0.2}}, -- Ancestral Fortitude
-            {974, 'BOTTOMRIGHT', {0.7, 0.4, 0}, false, true}, -- Earth Shield
-        },
-        WARLOCK = {
-            {20707, 'BOTTOMRIGHT', {0.7, 0, 1}, true, true}, -- Soulstone
-            {85767, 'BOTTOMLEFT', {0.7, 0.5, 1}, true, true, true}, -- Dark Intent
-        },
-        ALL = {
-            {23333, 'TOPLEFT', {1, 0, 0}}, -- Warsong flag, Horde
-            {23335, 'TOPLEFT', {0, 0, 1}}, -- Warsong flag, Alliance
-        },
-end
-]]
 
 local function AuraIcon(self, icon)
     if (icon.cd) then
@@ -228,6 +161,7 @@ local function CreateIndicators(self, unit)
 end
 
 local function UpdateThreat(self, _, unit)
+    if true then return end
     if (self.unit ~= unit) then
         return
     end
@@ -433,73 +367,73 @@ local function CreateRaidLayout(self, unit)
 
         -- Heal prediction
 
-    local myBar = CreateFrame('StatusBar', nil, self)
-    myBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
-    myBar:SetStatusBarColor(0, 1, 0.3, 0.5)
+    -- local myBar = CreateFrame('StatusBar', nil, self)
+    -- myBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
+    -- myBar:SetStatusBarColor(0, 1, 0.3, 0.5)
 
-    if (config.units.raid.smoothUpdates) then
-        myBar.Smooth = true
-    end
+    -- if (config.units.raid.smoothUpdates) then
+    --     myBar.Smooth = true
+    -- end
 
-    if (config.units.raid.horizontalHealthBars) then
-        myBar:SetOrientation('HORIZONTAL')
-        myBar:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
-        myBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT')
-        myBar:SetWidth(self:GetWidth())
-    else
-        myBar:SetOrientation('VERTICAL')
-        myBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'TOPLEFT')
-        myBar:SetPoint('BOTTOMRIGHT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
-        myBar:SetHeight(self:GetHeight())
-    end
+    -- if (config.units.raid.horizontalHealthBars) then
+    --     myBar:SetOrientation('HORIZONTAL')
+    --     myBar:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
+    --     myBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT')
+    --     myBar:SetWidth(self:GetWidth())
+    -- else
+    --     myBar:SetOrientation('VERTICAL')
+    --     myBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'TOPLEFT')
+    --     myBar:SetPoint('BOTTOMRIGHT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
+    --     myBar:SetHeight(self:GetHeight())
+    -- end
 
-    local otherBar = CreateFrame('StatusBar', nil, self)
-    otherBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
-    otherBar:SetStatusBarColor(0, 1, 0, 0.35)
+    -- local otherBar = CreateFrame('StatusBar', nil, self)
+    -- otherBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
+    -- otherBar:SetStatusBarColor(0, 1, 0, 0.35)
 
-    if (config.units.raid.smoothUpdates) then
-        otherBar.Smooth = true
-    end
+    -- if (config.units.raid.smoothUpdates) then
+    --     otherBar.Smooth = true
+    -- end
 
-    if (config.units.raid.horizontalHealthBars) then
-        otherBar:SetOrientation('HORIZONTAL')
-        otherBar:SetPoint('TOPLEFT', myBar:GetStatusBarTexture(), 'TOPRIGHT')
-        otherBar:SetPoint('BOTTOMLEFT', myBar:GetStatusBarTexture(), 'BOTTOMRIGHT')
-        otherBar:SetWidth(self:GetWidth())
-    else
-        otherBar:SetOrientation('VERTICAL')
-        otherBar:SetPoint('BOTTOMLEFT', myBar:GetStatusBarTexture(), 'TOPLEFT')
-        otherBar:SetPoint('BOTTOMRIGHT', myBar:GetStatusBarTexture(), 'TOPRIGHT')
-        otherBar:SetHeight(self:GetHeight())
-    end
+    -- if (config.units.raid.horizontalHealthBars) then
+    --     otherBar:SetOrientation('HORIZONTAL')
+    --     otherBar:SetPoint('TOPLEFT', myBar:GetStatusBarTexture(), 'TOPRIGHT')
+    --     otherBar:SetPoint('BOTTOMLEFT', myBar:GetStatusBarTexture(), 'BOTTOMRIGHT')
+    --     otherBar:SetWidth(self:GetWidth())
+    -- else
+    --     otherBar:SetOrientation('VERTICAL')
+    --     otherBar:SetPoint('BOTTOMLEFT', myBar:GetStatusBarTexture(), 'TOPLEFT')
+    --     otherBar:SetPoint('BOTTOMRIGHT', myBar:GetStatusBarTexture(), 'TOPRIGHT')
+    --     otherBar:SetHeight(self:GetHeight())
+    -- end
 
-    local absorbBar = CreateFrame('StatusBar', nil, self)
-    absorbBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
-    absorbBar:SetStatusBarColor(1, 1, 0, 0.35)
+    -- local absorbBar = CreateFrame('StatusBar', nil, self)
+    -- absorbBar:SetStatusBarTexture(config.media.statusbar, 'OVERLAY')
+    -- absorbBar:SetStatusBarColor(1, 1, 0, 0.35)
 
-    if (config.units.raid.smoothUpdates) then
-        absorbBar.Smooth = true
-    end
+    -- if (config.units.raid.smoothUpdates) then
+    --     absorbBar.Smooth = true
+    -- end
 
-    if (config.units.raid.horizontalHealthBars) then
-        absorbBar:SetOrientation('HORIZONTAL')
-        absorbBar:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
-        absorbBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT')
-        absorbBar:SetWidth(self:GetWidth())
-    else
-        absorbBar:SetOrientation('VERTICAL')
-        absorbBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'TOPLEFT')
-        absorbBar:SetPoint('BOTTOMRIGHT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
-        absorbBar:SetHeight(self:GetHeight())
-    end
+    -- if (config.units.raid.horizontalHealthBars) then
+    --     absorbBar:SetOrientation('HORIZONTAL')
+    --     absorbBar:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
+    --     absorbBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT')
+    --     absorbBar:SetWidth(self:GetWidth())
+    -- else
+    --     absorbBar:SetOrientation('VERTICAL')
+    --     absorbBar:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'TOPLEFT')
+    --     absorbBar:SetPoint('BOTTOMRIGHT', self.Health:GetStatusBarTexture(), 'TOPRIGHT')
+    --     absorbBar:SetHeight(self:GetHeight())
+    -- end
 
-    self.HealPrediction = {
-        myBar = myBar,
-        otherBar = otherBar,
-        absorbBar = absorbBar,
-        maxOverflow = 1.2,
-        frequentUpdates = true
-    }
+    -- self.HealPrediction = {
+    --     myBar = myBar,
+    --     otherBar = otherBar,
+    --     absorbBar = absorbBar,
+    --     maxOverflow = 1.2,
+    --     frequentUpdates = true
+    -- }
 
         -- Afk /offline timer, using frequentUpdates function from oUF tags
 
@@ -587,7 +521,7 @@ local function CreateRaidLayout(self, unit)
         -- Debuff icons, using freebAuras from oUF_Freebgrid
 
     self.FreebAuras = CreateFrame('Frame', nil, self)
-    self.FreebAuras:SetSize(config.units.raid.iconSize, config.units.raid.iconSize)
+    SetSize(self.FreebAuras, config.units.raid.iconSize, config.units.raid.iconSize)
     self.FreebAuras:SetPoint('CENTER', self.Health)
 
         -- Create indicators
@@ -612,33 +546,32 @@ local function CreateRaidLayout(self, unit)
     end
 
         -- Ressurection icon....ehm text!
+    -- if (config.units.raid.showResurrectText) then
+    --     self.ResurrectIcon = self.Health:CreateFontString(nil, 'OVERLAY')
+    --     self.ResurrectIcon:SetPoint('CENTER', self, 'BOTTOM', 0, 1)
+    --     self.ResurrectIcon:SetFont(config.font.fontSmall, 11, 'THINOUTLINE')
+    --     self.ResurrectIcon:SetShadowOffset(0, 0)
+    --     self.ResurrectIcon:SetTextColor(0.1, 1, 0.1)
+    --     self.ResurrectIcon:SetText('RES') -- RESURRECT
 
-    if (config.units.raid.showResurrectText) then
-        self.ResurrectIcon = self.Health:CreateFontString(nil, 'OVERLAY')
-        self.ResurrectIcon:SetPoint('CENTER', self, 'BOTTOM', 0, 1)
-        self.ResurrectIcon:SetFont(config.font.fontSmall, 11, 'THINOUTLINE')
-        self.ResurrectIcon:SetShadowOffset(0, 0)
-        self.ResurrectIcon:SetTextColor(0.1, 1, 0.1)
-        self.ResurrectIcon:SetText('RES') -- RESURRECT
+    --     self.ResurrectIcon.Override = function()
+    --         local incomingResurrect = UnitHasIncomingResurrection(self.unit)
 
-        self.ResurrectIcon.Override = function()
-            local incomingResurrect = UnitHasIncomingResurrection(self.unit)
+    --         if (incomingResurrect) then
+    --             self.ResurrectIcon:Show()
 
-            if (incomingResurrect) then
-                self.ResurrectIcon:Show()
+    --             if (self.NotHere) then
+    --                 self.NotHere:Hide()
+    --             end
+    --         else
+    --             self.ResurrectIcon:Hide()
 
-                if (self.NotHere) then
-                    self.NotHere:Hide()
-                end
-            else
-                self.ResurrectIcon:Hide()
-
-                if (self.NotHere) then
-                    self.NotHere:Show()
-                end
-            end
-        end
-    end
+    --             if (self.NotHere) then
+    --                 self.NotHere:Show()
+    --             end
+    --         end
+    --     end
+    -- end
 
         -- Playertarget border
 
@@ -719,7 +652,6 @@ SLASH_oUF_Neav_Raid_AnchorToggle1 = '/neavrt'
 oUF:RegisterStyle('oUF_Neav_Raid', CreateRaidLayout)
 oUF:Factory(function(self)
     self:SetActiveStyle('oUF_Neav_Raid')
-
     local rlayout = config.units.raid.layout
     local relpoint, anchpoint, offset
 
@@ -756,10 +688,10 @@ oUF:Factory(function(self)
     local raid = {}
     for i = 1, rlayout.numGroups do
         table.insert(raid, self:SpawnHeader('oUF_Neav_Raid'..i, nil, 'solo,party,raid',
-            'oUF-initialConfigFunction', ([[
-            self:SetWidth(%d)
-            self:SetHeight(%d)
-            ]]):format(config.units.raid.width, config.units.raid.height),
+            'oUF-initialConfigFunction', function(self, unit)
+              self:SetWidth(config.units.raid.width)
+              self:SetHeight(config.units.raid.height)
+            end,
 
             'showRaid', true,
             'showParty', config.units.raid.showParty,
@@ -775,7 +707,7 @@ oUF:Factory(function(self)
 
             'sortMethod', 'INDEX',
             'groupFilter', i
-            )
+          )
         )
 
         if (i == 1) then

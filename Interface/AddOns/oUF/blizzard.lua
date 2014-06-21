@@ -47,12 +47,7 @@ function oUF:DisableBlizzard(unit)
 	if(unit == 'player') then
 		HandleFrame(PlayerFrame)
 
-		-- For the damn vehicle support:
 		PlayerFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-		PlayerFrame:RegisterEvent('UNIT_ENTERING_VEHICLE')
-		PlayerFrame:RegisterEvent('UNIT_ENTERED_VEHICLE')
-		PlayerFrame:RegisterEvent('UNIT_EXITING_VEHICLE')
-		PlayerFrame:RegisterEvent('UNIT_EXITED_VEHICLE')
 
 		-- User placed frames don't animate
 		PlayerFrame:SetUserPlaced(true)
@@ -67,15 +62,6 @@ function oUF:DisableBlizzard(unit)
 		HandleFrame(TargetofFocusFrame)
 	elseif(unit == 'targettarget') then
 		HandleFrame(TargetFrameToT)
-	elseif(unit:match'(boss)%d?$' == 'boss') then
-		local id = unit:match'boss(%d)'
-		if(id) then
-			HandleFrame('Boss' .. id .. 'TargetFrame')
-		else
-			for i=1, 4 do
-				HandleFrame(('Boss%dTargetFrame'):format(i))
-			end
-		end
 	elseif(unit:match'(party)%d?$' == 'party') then
 		local id = unit:match'party(%d)'
 		if(id) then
@@ -85,6 +71,7 @@ function oUF:DisableBlizzard(unit)
 				HandleFrame(('PartyMemberFrame%d'):format(i))
 			end
 		end
+		HandleFrame('PartyMemberBackground')
 	elseif(unit:match'(arena)%d?$' == 'arena') then
 		local id = unit:match'arena(%d)'
 		if(id) then
@@ -96,7 +83,7 @@ function oUF:DisableBlizzard(unit)
 		end
 
 		-- Blizzard_ArenaUI should not be loaded
-		Arena_LoadUI = function() end
+		-- Arena_LoadUI = function() end
 --		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
 	end
 end
