@@ -26,3 +26,4 @@ Check out [renstrom](https://github.com/renstrom/NeavUI) on github for the origi
 - [oUF](http://www.wowinterface.com/downloads/info9994-oUF.html)
 - oUF_Neav
 - oUF_NeavRaid
+- [SquidMod](http://www.wowinterface.com/downloads/info10436-SquidModGraficPatch.html)
