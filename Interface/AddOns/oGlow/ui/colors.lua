@@ -85,7 +85,6 @@ function frame:CreateOptions()
 	end
 
 	local Label_Update = function(self)
-	  DEFAULT_CHAT_FRAME:AddMessage(self:GetName())
 		local row = self:GetParent()
 
 		local r = row.redLabel:GetNumber() / 255

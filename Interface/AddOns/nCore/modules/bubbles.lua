@@ -39,7 +39,7 @@ local function SkinFrame(frame)
     frame.sender:SetPoint('BOTTOMLEFT', frame.text, 'TOPLEFT', 0, 4)
     frame.sender:SetJustifyH('LEFT')
 
-    frame:HookScript('OnHide', function() 
+    frame:SetScript('OnHide', function() 
         frame.inUse = false 
     end)
 end
@@ -59,7 +59,7 @@ local function UpdateFrame(frame, name)
         local color = RAID_CLASS_COLORS[class] or { r = 0.5, g = 0.5, b = 0.5 }
         frame.sender:SetText(('|cFF%2x%2x%2x%s|r'):format(color.r * 255, color.g * 255, color.b * 255, name))
         if frame.text:GetWidth() < frame.sender:GetWidth() then
-            frame.text:SetWidth(frame.sender:GetWidth())
+            frame.text:SetWidth(frame.sender:GetWidth() + (frame.sender:GetWidth() - frame.text:GetWidth()))
         end
     end
 end
