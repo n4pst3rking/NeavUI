@@ -44,15 +44,15 @@ local function SkinFrame(frame)
     end)
 end
 
-local function UpdateFrame(frame, guid, name)
+local function UpdateFrame(frame, name)
     if (not frame.text) then 
         SkinFrame(frame) 
     end
     frame.inUse = true
 
     local class
-    if (guid ~= nil and guid ~= '') then
-        _, class, _, _, _, _ = GetPlayerInfoByGUID(guid)
+    if (name ~= nil and name ~= '') then
+        _, class = UnitClass(name)
     end
 
     if (name) then
@@ -79,12 +79,12 @@ local function FindFrame(msg)
 end
 
 local f = CreateFrame('Frame')
-for event, cvar in pairs(events) do 
+for event, cvar in pairs(events) do
     f:RegisterEvent(event) 
 end
 
-f:SetScript('OnEvent', function(self, event, msg, sender, _, _, _, _, _, _, _, _, _, guid)
-    if (GetCVarBool(events[event])) then
+f:SetScript('OnEvent', function(self, event, msg, sender)
+    if (GetCVar(events[event]) == '1') then
         f.elapsed = 0
         f:SetScript('OnUpdate', function(self, elapsed)
             self.elapsed = self.elapsed + elapsed
@@ -92,7 +92,7 @@ f:SetScript('OnEvent', function(self, event, msg, sender, _, _, _, _, _, _, _, _
             if (frame or self.elapsed > 0.3) then
                 f:SetScript('OnUpdate', nil)
                 if (frame) then 
-                    UpdateFrame(frame, guid, sender) 
+                    UpdateFrame(frame, sender) 
                 end
             end
         end)
